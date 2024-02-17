@@ -27,7 +27,6 @@ public class ServiceTest {
     @InjectMocks
     Service botService;
 
-    Service d;
 
     @Captor ArgumentCaptor<SendMessage> captor;
 
