@@ -90,11 +90,6 @@
             </exclusions>
         </dependency>
         <dependency>
-            <groupId>org.wiremock</groupId>
-            <artifactId>wiremock</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>io.rest-assured</groupId>
             <artifactId>spring-web-test-client</artifactId>
             <scope>test</scope>
