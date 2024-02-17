@@ -17,8 +17,7 @@ public class HelpCommandHandler implements Command {
 
     @Override
     public SendMessage handle(Update update) {
-        return new SendMessage(update.message().chat(), getAllCommands());
+        return new SendMessage(update.message().chat().id(), getAllCommands());
     }
-
 
 }
