@@ -8,7 +8,7 @@ public class CommandUtils {
 
     }
 
-    public static List<? extends Command> getCommands() {
+    public static List<Command> getCommands() {
         return Arrays.asList(
             new StartCommandHandler(),
             new HelpCommandHandler(),
@@ -20,7 +20,7 @@ public class CommandUtils {
 
     public static String getAllCommands() {
         StringBuilder stringCommands = new StringBuilder();
-        List<? extends Command> s = CommandUtils.getCommands();
+        List<Command> s = CommandUtils.getCommands();
         stringCommands.append("You can control me by sending these commands:").append("\n\n");
         s.forEach(it -> stringCommands.append(it.name()).append(" - ").append(it.descripton()).append("\n"));
         return String.valueOf(stringCommands);
