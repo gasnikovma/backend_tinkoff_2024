@@ -10,12 +10,12 @@ import org.springframework.web.reactive.function.client.WebClient;
 public class ClientConfig {
 
     @Bean
-    public GithubClient githubClient(WebClient.Builder webClientBuilder){
+    public GithubClient githubClient(WebClient.Builder webClientBuilder) {
         return new GithubClient(webClientBuilder);
     }
 
     @Bean
-    public StackOverflowClient stackOverflowClient(WebClient.Builder webClientBuilder){
+    public StackOverflowClient stackOverflowClient(WebClient.Builder webClientBuilder) {
         return new StackOverflowClient(webClientBuilder);
     }
 

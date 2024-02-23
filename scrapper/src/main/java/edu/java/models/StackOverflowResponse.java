@@ -5,7 +5,7 @@ import java.util.List;
 
 public record StackOverflowResponse(
     @JsonProperty("items")
-    List<StackOverFlowItemsResponse>itemsResponses
+    List<StackOverFlowItemsResponse> itemsResponses
 ) {
 
 }
