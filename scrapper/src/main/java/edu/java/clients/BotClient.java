@@ -1,7 +1,7 @@
 package edu.java.clients;
 
-import edu.java.models.dto.request.LinkUpdateRequest;
 import java.util.List;
+import edu.java.models.dto.request.LinkUpdateRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
