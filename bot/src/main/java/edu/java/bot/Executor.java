@@ -5,13 +5,13 @@ import com.pengrad.telegrambot.UpdatesListener;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @org.springframework.stereotype.Controller
-public class Controller {
+public class Executor {
 
     private final Service telegramBotService;
     private final TelegramBot bot;
 
     @Autowired
-    public Controller(Service service, TelegramBot bot) {
+    public Executor(Service service, TelegramBot bot) {
         this.telegramBotService = service;
         this.bot = bot;
         this.run();
