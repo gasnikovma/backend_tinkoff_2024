@@ -1,6 +1,5 @@
 package edu.java.models.dto.response;
 
-import lombok.Data;
 import java.util.List;
 
 public record ApiErrorResponse(

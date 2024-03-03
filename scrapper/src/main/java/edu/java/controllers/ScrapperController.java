@@ -10,6 +10,8 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,8 +21,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import java.util.ArrayList;
-import java.util.List;
 
 @RestController
 @RequestMapping("scrapper")
@@ -108,11 +108,12 @@ public class ScrapperController {
     })
     @PostMapping("/links")
     ResponseEntity<LinkResponse> addLink(
-        @RequestHeader(name = "Tg-Chat-Id") long chatId, @RequestBody
+        @RequestHeader(name = "Tg-Chat-Id")
+        long chatId, @RequestBody
     AddLinkRequest addLinkRequest
     ) {
         //
-        LinkResponse linkResponse = new LinkResponse(10L, "https://");
+        LinkResponse linkResponse = new LinkResponse(chatId, addLinkRequest.uri());
         return ResponseEntity.ok(linkResponse);
     }
 
@@ -136,10 +137,10 @@ public class ScrapperController {
     @DeleteMapping("/links")
     ResponseEntity<LinkResponse> removeLink(
         @RequestHeader(name = "Tg-Chat-Id") long chatId, @RequestBody
-    RemoveLinkRequest addLinkRequest
+    RemoveLinkRequest removeLinkRequest
     ) {
         //
-        LinkResponse linkResponse = new LinkResponse(10L, "https://");
+        LinkResponse linkResponse = new LinkResponse(chatId, removeLinkRequest.uri());
         return ResponseEntity.ok(linkResponse);
     }
 

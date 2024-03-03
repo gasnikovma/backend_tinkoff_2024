@@ -1,4 +1,4 @@
-package edu.java.bot.dto.request;
+package edu.java.models.dto.request;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -9,7 +9,7 @@ public record LinkUpdateRequest(
     @Min(1)
     long id,
     @NotBlank
-    String url,
+    String uri,
     @NotBlank
     String description,
     @NotEmpty
