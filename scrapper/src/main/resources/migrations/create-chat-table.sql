@@ -1,0 +1,6 @@
+CREATE TABLE Chat
+(
+    id         BIGINT GENERATED ALWAYS AS IDENTITY,
+    tg_chat_id INT NOT NULL,
+    PRIMARY KEY (id)
+);
