@@ -1,5 +1,6 @@
 package edu.java.configuration;
 
+import edu.java.clients.BotClient;
 import edu.java.clients.GithubClient;
 import edu.java.clients.StackOverflowClient;
 import org.springframework.context.annotation.Bean;
@@ -17,6 +18,11 @@ public class ClientConfig {
     @Bean
     public StackOverflowClient stackOverflowClient(WebClient.Builder webClientBuilder) {
         return new StackOverflowClient(webClientBuilder);
+    }
+
+    @Bean
+    public BotClient botClient(WebClient.Builder webClientBuilder) {
+        return new BotClient(webClientBuilder);
     }
 
 }
