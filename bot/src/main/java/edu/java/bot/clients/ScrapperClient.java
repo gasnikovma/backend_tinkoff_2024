@@ -65,15 +65,6 @@ public class ScrapperClient {
             .block();
 
     }
-   /*public Mono<LinkResponse> addLink(long chatId, String uri) {
-
-       return this.webClient.post()
-           .uri(urlLinks)
-           .header(headerTgChat, String.valueOf(chatId))
-           .body(BodyInserters.fromValue(new AddLinkRequest(uri)))
-           .retrieve().bodyToMono(LinkResponse.class);
-
-   }*/
 
 
        public ResponseEntity<LinkResponse> removeLink(long chatId, String uri) {

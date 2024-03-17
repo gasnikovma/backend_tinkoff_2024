@@ -22,7 +22,7 @@ public class JdbcLinkRepository implements LinkRepository {
         Optional<Link> link = findByUri(uri);
         long id;
         if (link.isEmpty()) {
-            jdbcTemplate.update("INSERT INTO link(id, last_update_at) VALUES(?,?)", chatId, OffsetDateTime.MIN);
+            jdbcTemplate.update("INSERT INTO link(url, last_update_at,last_check_at) VALUES(?,?,?)", uri, OffsetDateTime.MIN,OffsetDateTime.MIN);
             List<Link> allLinks = findAll();
             id = allLinks.get(allLinks.size()-1).getId();
         } else {
@@ -40,7 +40,7 @@ public class JdbcLinkRepository implements LinkRepository {
             (resultSet, row) ->
                 new Link(
                     resultSet.getLong("id"),
-                    resultSet.getString("uri"),
+                    resultSet.getString("url"),
                     resultSet.getObject(
                         "last_check_at",
                         OffsetDateTime.class
@@ -59,7 +59,7 @@ public class JdbcLinkRepository implements LinkRepository {
             (resultSet, row) ->
                 new Link(
                     resultSet.getLong("id"),
-                    resultSet.getString("uri"),
+                    resultSet.getString("url"),
                     resultSet.getObject(
                         "last_check_at",
                         OffsetDateTime.class
@@ -92,7 +92,7 @@ public class JdbcLinkRepository implements LinkRepository {
             (resultSet, row) ->
                 new Link(
                     resultSet.getLong("id"),
-                    resultSet.getString("uri"),
+                    resultSet.getString("url"),
                     resultSet.getObject(
                         "last_check_at",
                         OffsetDateTime.class
@@ -128,7 +128,7 @@ public class JdbcLinkRepository implements LinkRepository {
             (resultSet, row) ->
                 new Link(
                     resultSet.getLong("id"),
-                    resultSet.getString("uri"),
+                    resultSet.getString("url"),
                     resultSet.getObject(
                         "last_check_at",
                         OffsetDateTime.class
@@ -147,7 +147,7 @@ public class JdbcLinkRepository implements LinkRepository {
             (resultSet, row) ->
                 new Link(
                     resultSet.getLong("id"),
-                    resultSet.getString("uri"),
+                    resultSet.getString("url"),
                     resultSet.getObject(
                         "last_check_at",
                         OffsetDateTime.class
