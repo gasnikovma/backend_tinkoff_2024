@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,6 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("scrapper")
 @RequiredArgsConstructor
+@Slf4j
 public class ScrapperController {
 
     private final LinkService linkService;
@@ -50,9 +52,10 @@ public class ScrapperController {
 
     })
     @PostMapping("/tg-chat/{id}")
-    ResponseEntity<Void> registerChat(@PathVariable long id) {
+    public String  registerChat(@PathVariable long id) {
+
         registerService.reigster(id);
-        return ResponseEntity.ok().build();
+        return "Chat is registered!";
     }
 
     @Operation(summary = "Удалить чат")
@@ -69,9 +72,9 @@ public class ScrapperController {
 
     })
     @DeleteMapping("/tg-chat/{id}")
-    ResponseEntity<Void> deleteChat(@PathVariable long id) {
+    public String deleteChat(@PathVariable long id) {
         registerService.unregister(id);
-        return ResponseEntity.ok().build();
+        return "Chat is successfully deleted";
     }
 
     @Operation(summary = "Получить все отслеживаемые ссылки")
@@ -92,13 +95,13 @@ public class ScrapperController {
     })
 
     @GetMapping("/links")
-    ResponseEntity<ListLinksResponse> getLinks(@RequestHeader("Tg-Chat-Id") long chatId) {
+    ListLinksResponse getLinks(@RequestHeader("Tg-Chat-Id") long chatId) {
         List<Link> links = linkService.allLinks(chatId);
         List<LinkResponse> linkResponses = new ArrayList<>();
         for (int i = 0; i < links.size(); i++) {
             linkResponses.add(new LinkResponse(links.get(i).getId(), links.get(i).getName()));
         }
-        return ResponseEntity.ok(new ListLinksResponse(linkResponses, links.size()));
+        return new ListLinksResponse(linkResponses, links.size());
 
     }
 
@@ -119,13 +122,14 @@ public class ScrapperController {
 
     })
     @PostMapping("/links")
-    ResponseEntity<LinkResponse> addLink(
-        @RequestHeader(name = "Tg-Chat-Id")
+    public LinkResponse addLink(
+        @RequestHeader("Tg-Chat-Id")
         long chatId, @RequestBody
     AddLinkRequest addLinkRequest
     ) {
+        log.info("ne zahodit(");
         Link link = linkService.add(chatId, URI.create(addLinkRequest.uri()));
-        return ResponseEntity.ok(new LinkResponse(link.getId(), link.getName()));
+        return new LinkResponse(link.getId(), link.getName());
     }
 
     @Operation(summary = "Убрать отслеживание ссылки")
@@ -146,12 +150,12 @@ public class ScrapperController {
     })
 
     @DeleteMapping("/links")
-    ResponseEntity<LinkResponse> removeLink(
+    public LinkResponse removeLink(
         @RequestHeader(name = "Tg-Chat-Id") long chatId, @RequestBody
     RemoveLinkRequest removeLinkRequest
     ) {
         Link link = linkService.remove(chatId, URI.create(removeLinkRequest.uri()));
-        return ResponseEntity.ok(new LinkResponse(link.getId(), link.getName()));
+        return new LinkResponse(link.getId(), link.getName());
     }
 
 }

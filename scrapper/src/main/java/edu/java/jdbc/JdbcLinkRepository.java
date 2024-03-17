@@ -22,7 +22,7 @@ public class JdbcLinkRepository implements LinkRepository {
         Optional<Link> link = findByUri(uri);
         long id;
         if (link.isEmpty()) {
-            jdbcTemplate.update("INSERT INTO link(id, last_update_at) VALUES(?,?)", uri, OffsetDateTime.MIN);
+            jdbcTemplate.update("INSERT INTO link(id, last_update_at) VALUES(?,?)", chatId, OffsetDateTime.MIN);
             List<Link> allLinks = findAll();
             id = allLinks.get(allLinks.size()-1).getId();
         } else {
@@ -88,7 +88,7 @@ public class JdbcLinkRepository implements LinkRepository {
     @Transactional
     public Optional<Link> findByChatIdAndUrl(long id, String uri) {
         List<Link> links = jdbcTemplate.query(
-            "SELECT DISTINCT * FROM chat_link c JOIN link l ON c.link_id = l.id WHERE c.chat_id = ? AND l.uri = ?",
+            "SELECT DISTINCT * FROM chat_link c JOIN link l ON c.link_id = l.id WHERE c.chat_id = ? AND l.url = ?",
             (resultSet, row) ->
                 new Link(
                     resultSet.getLong("id"),
@@ -113,7 +113,7 @@ public class JdbcLinkRepository implements LinkRepository {
     @Transactional
     public List<Long> findChatsByLink(String uri) {
         return jdbcTemplate.query(
-            "SELECT DISTINCT c.chat_id FROM chat_link c JOIN link l ON l.id = c.link_id WHERE l.uri = (?)",
+            "SELECT DISTINCT c.chat_id FROM chat_link c JOIN link l ON l.id = c.link_id WHERE l.url = (?)",
             (resultSet, row) -> resultSet.getLong("chat_id"),
             uri
         );
@@ -124,7 +124,7 @@ public class JdbcLinkRepository implements LinkRepository {
     @Transactional
     public Optional<Link> findByUri(String uri) {
         List<Link> links = jdbcTemplate.query(
-            "SELECT * FROM link WHERE uri = ?",
+            "SELECT * FROM link WHERE url = ?",
             (resultSet, row) ->
                 new Link(
                     resultSet.getLong("id"),
@@ -161,12 +161,12 @@ public class JdbcLinkRepository implements LinkRepository {
     @Override
     @Transactional
     public void updateLastCheck(OffsetDateTime check, String uri) {
-        jdbcTemplate.update("UPDATE link SET last_check_at = (?) WHERE uri = (?)", check, uri);
+        jdbcTemplate.update("UPDATE link SET last_check_at = (?) WHERE url = (?)", check, uri);
     }
 
     @Override
     @Transactional
     public void updateLastUpdate(OffsetDateTime check, String uri) {
-        jdbcTemplate.update("UPDATE link SET last_update_at = (?) WHERE uri = (?)", check, uri);
+        jdbcTemplate.update("UPDATE link SET last_update_at = (?) WHERE url = (?)", check, uri);
     }
 }

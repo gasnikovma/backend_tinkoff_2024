@@ -1,14 +1,19 @@
 package edu.java.bot.clients;
 
+import edu.java.bot.exceptions.NoChatException;
 import edu.java.bot.models.request.AddLinkRequest;
 import edu.java.bot.models.request.RemoveLinkRequest;
+import edu.java.bot.models.response.ApiErrorResponse;
 import edu.java.bot.models.response.LinkResponse;
 import edu.java.bot.models.response.ListLinksResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
+
 @Slf4j
 public class ScrapperClient {
     private final WebClient webClient;
@@ -25,6 +30,7 @@ public class ScrapperClient {
     }
 
     public ResponseEntity<Void> registerChat(long id) {
+
         return this.webClient.post()
             .uri(urlTgChat, id)
             .retrieve()
@@ -48,8 +54,8 @@ public class ScrapperClient {
 
     }
 
-    public ResponseEntity<LinkResponse> addLink(long chatId, String uri) {
-        log
+   public ResponseEntity<LinkResponse> addLink(long chatId, String uri) {
+
         return this.webClient.post()
             .uri(urlLinks)
             .header(headerTgChat, String.valueOf(chatId))
@@ -57,9 +63,20 @@ public class ScrapperClient {
             .retrieve()
             .toEntity(LinkResponse.class)
             .block();
-    }
 
-    public ResponseEntity<LinkResponse> removeLink(long chatId, String uri) {
+    }
+   /*public Mono<LinkResponse> addLink(long chatId, String uri) {
+
+       return this.webClient.post()
+           .uri(urlLinks)
+           .header(headerTgChat, String.valueOf(chatId))
+           .body(BodyInserters.fromValue(new AddLinkRequest(uri)))
+           .retrieve().bodyToMono(LinkResponse.class);
+
+   }*/
+
+
+       public ResponseEntity<LinkResponse> removeLink(long chatId, String uri) {
         return this.webClient.method(HttpMethod.DELETE)
             .uri(urlLinks)
             .header(headerTgChat, String.valueOf(chatId))

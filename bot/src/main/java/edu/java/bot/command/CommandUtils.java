@@ -70,9 +70,11 @@ public class CommandUtils {
                 "This is link tracer bot! It helps to check updates on GitHub and StackOverFlow websites"
             );
         }
-
         catch (ChatAlreadyExistsException e){
-            return new SendMessage(update.message().chat().id(),"You hsve already been registered!");
+            return new SendMessage(update.message().chat().id(),"You have already been registered!");
+        }
+        catch (Exception e){
+            return new SendMessage(update.message().chat().id(),"You have already been registered!");
         }
     }
 
