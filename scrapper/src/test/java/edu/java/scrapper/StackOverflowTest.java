@@ -51,9 +51,9 @@ public class StackOverflowTest {
                     }
                 ]
             }""";
-        wireMockServer.stubFor(get(urlEqualTo("/2.3/questions/15794821?order=desc&sort=activity&site=stackoverflow")).willReturn(
-            aResponse().withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .withBody(wireMockResponse)));
+            wireMockServer.stubFor(get(urlEqualTo("/2.3/questions/15794821?order=desc&sort=activity&site=stackoverflow")).willReturn(
+                aResponse().withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                    .withBody(wireMockResponse)));
         StackOverflowResponse githubResponse = stackOverflowClient.receiveRepo(15794821L).block();
         assertEquals(githubResponse.itemsResponses().get(0).questionId(), 15794821L);
         assertEquals(githubResponse.itemsResponses().get(0).creationDate(), 1365012645L);

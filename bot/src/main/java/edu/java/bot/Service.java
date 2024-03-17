@@ -7,24 +7,30 @@ import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.request.SetMyCommands;
 import edu.java.bot.command.Command;
 import java.util.List;
+import edu.java.bot.command.CommandUtils;
+import edu.java.bot.command.ListCommandHandler;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import static edu.java.bot.command.CommandUtils.getCommands;
 
 @org.springframework.stereotype.Service
+@Slf4j
 public class Service {
 
     private final TelegramBot bot;
+    private final CommandUtils commandUtils;
 
     @Autowired
-    private Service(TelegramBot telegramBot) {
+    private Service(TelegramBot telegramBot, CommandUtils commandUtils) {
         this.bot = telegramBot;
+        this.commandUtils = commandUtils;
     }
 
     public void handleUpdates(Update update) {
         boolean isValidCommand = false;
         if (update.message() != null) {
-            for (Command command : getCommands()) {
-                if (update.message().text().equals(command.name())) {
+            log.info(update.message().text());
+            for (Command command : commandUtils.getCommands()) {
+                if (update.message().text().split(" ")[0].equals(command.name())) {
                     isValidCommand = true;
                     bot.execute(command.handle(update));
 
@@ -38,7 +44,7 @@ public class Service {
     }
 
     public void setMyCommands() {
-        List<BotCommand> botCommands = getCommands().stream()
+        List<BotCommand> botCommands = commandUtils.getCommands().stream()
             .map(command -> new BotCommand(command.name(), command.descripton())).toList();
 
         SetMyCommands setMyCommands = new SetMyCommands(botCommands.toArray(new BotCommand[0]));

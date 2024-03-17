@@ -1,17 +1,23 @@
 package edu.java.controllers;
 
+import edu.java.models.dto.Link;
 import edu.java.models.dto.request.AddLinkRequest;
 import edu.java.models.dto.request.RemoveLinkRequest;
 import edu.java.models.dto.response.ApiErrorResponse;
 import edu.java.models.dto.response.LinkResponse;
 import edu.java.models.dto.response.ListLinksResponse;
+import edu.java.service.LinkService;
+import edu.java.service.RegisterService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,7 +30,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("scrapper")
+@RequiredArgsConstructor
 public class ScrapperController {
+
+    private final LinkService linkService;
+    private final RegisterService registerService;
 
     @Operation(summary = "Зарегистровать чат")
     @ApiResponses(value = {
@@ -41,7 +51,7 @@ public class ScrapperController {
     })
     @PostMapping("/tg-chat/{id}")
     ResponseEntity<Void> registerChat(@PathVariable long id) {
-        //
+        registerService.reigster(id);
         return ResponseEntity.ok().build();
     }
 
@@ -60,7 +70,7 @@ public class ScrapperController {
     })
     @DeleteMapping("/tg-chat/{id}")
     ResponseEntity<Void> deleteChat(@PathVariable long id) {
-        //
+        registerService.unregister(id);
         return ResponseEntity.ok().build();
     }
 
@@ -83,10 +93,12 @@ public class ScrapperController {
 
     @GetMapping("/links")
     ResponseEntity<ListLinksResponse> getLinks(@RequestHeader("Tg-Chat-Id") long chatId) {
-        //
+        List<Link> links = linkService.allLinks(chatId);
         List<LinkResponse> linkResponses = new ArrayList<>();
-        ListLinksResponse links = new ListLinksResponse(linkResponses, linkResponses.size());
-        return ResponseEntity.ok(links);
+        for (int i = 0; i < links.size(); i++) {
+            linkResponses.add(new LinkResponse(links.get(i).getId(), links.get(i).getName()));
+        }
+        return ResponseEntity.ok(new ListLinksResponse(linkResponses, links.size()));
 
     }
 
@@ -112,9 +124,8 @@ public class ScrapperController {
         long chatId, @RequestBody
     AddLinkRequest addLinkRequest
     ) {
-        //
-        LinkResponse linkResponse = new LinkResponse(chatId, addLinkRequest.uri());
-        return ResponseEntity.ok(linkResponse);
+        Link link = linkService.add(chatId, URI.create(addLinkRequest.uri()));
+        return ResponseEntity.ok(new LinkResponse(link.getId(), link.getName()));
     }
 
     @Operation(summary = "Убрать отслеживание ссылки")
@@ -139,9 +150,8 @@ public class ScrapperController {
         @RequestHeader(name = "Tg-Chat-Id") long chatId, @RequestBody
     RemoveLinkRequest removeLinkRequest
     ) {
-        //
-        LinkResponse linkResponse = new LinkResponse(chatId, removeLinkRequest.uri());
-        return ResponseEntity.ok(linkResponse);
+        Link link = linkService.remove(chatId, URI.create(removeLinkRequest.uri()));
+        return ResponseEntity.ok(new LinkResponse(link.getId(), link.getName()));
     }
 
 }

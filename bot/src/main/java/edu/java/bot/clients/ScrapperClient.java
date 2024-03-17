@@ -4,11 +4,12 @@ import edu.java.bot.models.request.AddLinkRequest;
 import edu.java.bot.models.request.RemoveLinkRequest;
 import edu.java.bot.models.response.LinkResponse;
 import edu.java.bot.models.response.ListLinksResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
-
+@Slf4j
 public class ScrapperClient {
     private final WebClient webClient;
     private final String urlTgChat = "/scrapper/tg-chat/{id}";
@@ -48,6 +49,7 @@ public class ScrapperClient {
     }
 
     public ResponseEntity<LinkResponse> addLink(long chatId, String uri) {
+        log
         return this.webClient.post()
             .uri(urlLinks)
             .header(headerTgChat, String.valueOf(chatId))
