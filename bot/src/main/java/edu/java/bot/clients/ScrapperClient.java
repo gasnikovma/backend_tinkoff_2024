@@ -1,6 +1,5 @@
 package edu.java.bot.clients;
 
-import edu.java.bot.exceptions.NoChatException;
 import edu.java.bot.models.request.AddLinkRequest;
 import edu.java.bot.models.request.RemoveLinkRequest;
 import edu.java.bot.models.response.ApiErrorResponse;
@@ -65,6 +64,7 @@ public class ScrapperClient {
             .block();
 
     }
+
 
 
        public ResponseEntity<LinkResponse> removeLink(long chatId, String uri) {

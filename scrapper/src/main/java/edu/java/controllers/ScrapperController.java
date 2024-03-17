@@ -127,7 +127,7 @@ public class ScrapperController {
         long chatId, @RequestBody
     AddLinkRequest addLinkRequest
     ) {
-        log.info("ne zahodit(");
+
         Link link = linkService.add(chatId, URI.create(addLinkRequest.uri()));
         return new LinkResponse(link.getId(), link.getName());
     }

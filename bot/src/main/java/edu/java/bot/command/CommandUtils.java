@@ -3,7 +3,6 @@ package edu.java.bot.command;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.clients.ScrapperClient;
-import edu.java.bot.exceptions.ChatAlreadyExistsException;
 import edu.java.bot.models.response.LinkResponse;
 import edu.java.bot.models.response.ListLinksResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import java.util.Arrays;
 import java.util.List;
-
 
 @Component
 @Slf4j
@@ -69,13 +67,10 @@ public class CommandUtils {
                 update.message().chat().id(),
                 "This is link tracer bot! It helps to check updates on GitHub and StackOverFlow websites"
             );
+        } catch (Exception e) {
+            return new SendMessage(update.message().chat().id(), "You have already been registered!");
         }
-        catch (ChatAlreadyExistsException e){
-            return new SendMessage(update.message().chat().id(),"You have already been registered!");
-        }
-        catch (Exception e){
-            return new SendMessage(update.message().chat().id(),"You have already been registered!");
-        }
+
     }
 
     public SendMessage trackLink(Update update) {
@@ -89,12 +84,13 @@ public class CommandUtils {
                 " This link is incorrect. Valid format: https//github.com/* or https://stackoverflow.com/questions/*"
             );
         }
-        scrapperClient.addLink(update.message().chat().id(), request.get(1));
-        return new SendMessage(update.message().chat().id(), request.get(1) + " is now tracked!");
-        /*catch(LinkAlreadyExists e){
-        return new SendMessage(update.message().chat().id(), request.get(1) + " was already tracked!");
+        try {
+            scrapperClient.addLink(update.message().chat().id(), request.get(1));
+            return new SendMessage(update.message().chat().id(), request.get(1) + " is now tracked!");
+        } catch (Exception e) {
+            return new SendMessage(update.message().chat().id(), request.get(1) + " was already tracked!");
         }
-         */
+
     }
 
     public SendMessage untrackLink(Update update) {
@@ -108,12 +104,12 @@ public class CommandUtils {
                 " This link is incorrect. Valid format: https//github.com/* or https://stackoverflow.com/questions/*"
             );
         }
-        scrapperClient.removeLink(update.message().chat().id(), request.get(1));
-        return new SendMessage(update.message().chat().id(), request.get(1) + " is now untracked!");
-        /*catch(LinkDoesNotExists e){
-        return new SendMessage(update.message().chat().id(), request.get(1) + " was already tracked!");
+        try {
+            scrapperClient.removeLink(update.message().chat().id(), request.get(1));
+            return new SendMessage(update.message().chat().id(), request.get(1) + " is now untracked!");
+        } catch (Exception e) {
+            return new SendMessage(update.message().chat().id(), request.get(1) + " was already untracked!");
         }
-         */
 
     }
 
