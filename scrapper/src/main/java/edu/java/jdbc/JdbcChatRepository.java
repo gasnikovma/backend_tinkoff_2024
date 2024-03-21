@@ -2,13 +2,12 @@ package edu.java.jdbc;
 
 import edu.java.models.dto.Chat;
 import edu.java.repository.ChatRepository;
-import lombok.AllArgsConstructor;
+import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.List;
-import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -24,9 +23,10 @@ public class JdbcChatRepository implements ChatRepository {
     @Override
     @Transactional
     public int remove(long id) {
-        List<Long> links = jdbcTemplate.queryForList("SELECT link_id FROM chat_link WHERE chat_id = (?)", Long.class, id);
+        List<Long> links =
+            jdbcTemplate.queryForList("SELECT link_id FROM chat_link WHERE chat_id = (?)", Long.class, id);
         jdbcTemplate.update("DELETE FROM chat_link WHERE chat_id = (?)", id);
-        for (Long linkId: links) {
+        for (Long linkId : links) {
             List<Long> chatsWithSameLink = jdbcTemplate
                 .queryForList("SELECT chat_id FROM chat_link WHERE link_id = (?)", Long.class, linkId);
             if (chatsWithSameLink.isEmpty()) {
@@ -39,14 +39,17 @@ public class JdbcChatRepository implements ChatRepository {
 
     @Override
     public List<Chat> findAll() {
-        return jdbcTemplate.query("SELECT * FROM chat",
-            (resultSet, row) -> new Chat(resultSet.getLong("id")));
+        return jdbcTemplate.query(
+            "SELECT * FROM chat",
+            (resultSet, row) -> new Chat(resultSet.getLong("id"))
+        );
     }
 
     @Override
     public Optional<Chat> findById(long id) {
         List<Chat> chats = jdbcTemplate.query("SELECT * FROM chat WHERE id = ?",
-            (resultSet, row) -> new Chat(resultSet.getLong("id")), id);
+            (resultSet, row) -> new Chat(resultSet.getLong("id")), id
+        );
         if (chats.isEmpty()) {
             return Optional.empty();
         }

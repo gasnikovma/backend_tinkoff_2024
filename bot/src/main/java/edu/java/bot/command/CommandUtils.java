@@ -5,17 +5,17 @@ import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.clients.ScrapperClient;
 import edu.java.bot.models.response.LinkResponse;
 import edu.java.bot.models.response.ListLinksResponse;
+import java.util.Arrays;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import java.util.Arrays;
-import java.util.List;
 
 @Component
 @Slf4j
+@SuppressWarnings({"MultipleStringLiterals", "MagicNumber"})
 public class CommandUtils {
-    @Autowired
-    public void setScrapperClient(ScrapperClient scrapperClient) {
+    @Autowired public void setScrapperClient(ScrapperClient scrapperClient) {
         this.scrapperClient = scrapperClient;
     }
 
@@ -58,8 +58,7 @@ public class CommandUtils {
                 subscribedLinksResponse.append(link.uri()).append("\n");
             }
             return new SendMessage(update.message().chat().id(), subscribedLinksResponse.toString());
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             return new SendMessage(update.message().chat().id(), "You are not registered!");
         }
 
@@ -125,8 +124,9 @@ public class CommandUtils {
         }
         if (uri.startsWith("https://stackoverflow.com/questions/")) {
             String[] uriParts = uri.split("/");
-            return uriParts.length == 6 && uriParts[4].matches("-?\\d+") && !uriParts[4].isEmpty() &&
-                !uriParts[5].isEmpty();
+            return uriParts.length == 6
+                && uriParts[4].matches("-?\\d+") && !uriParts[4].isEmpty()
+                && !uriParts[5].isEmpty();
         }
         return false;
     }

@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 public class UntrackCommandHandler implements Command {
 
     private CommandUtils commandUtils;
+
     @Override
     public String name() {
         return "/untrack";

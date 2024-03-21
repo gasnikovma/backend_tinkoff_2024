@@ -6,9 +6,8 @@ import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.request.SetMyCommands;
 import edu.java.bot.command.Command;
-import java.util.List;
 import edu.java.bot.command.CommandUtils;
-import edu.java.bot.command.ListCommandHandler;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -17,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class Service {
 
     private final TelegramBot bot;
+
     private final CommandUtils commandUtils;
 
     @Autowired

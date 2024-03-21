@@ -9,14 +9,14 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class RegisterServiceImpl implements RegisterService{
+public class RegisterServiceImpl implements RegisterService {
     private final ChatRepository chatRepository;
+
     @Override
     public void reigster(long chatId) {
         try {
             chatRepository.add(chatId);
-        }
-        catch (DataIntegrityViolationException e){
+        } catch (DataIntegrityViolationException e) {
             throw new ChatAlreadyExistsException("Chat is already in db");
         }
 
@@ -24,7 +24,7 @@ public class RegisterServiceImpl implements RegisterService{
 
     @Override
     public void unregister(long chatId) {
-        if(chatRepository.remove(chatId)==0){
+        if (chatRepository.remove(chatId) == 0) {
             throw new NoChatException("Chat is not in db!");
         }
 

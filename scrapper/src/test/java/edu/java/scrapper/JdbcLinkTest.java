@@ -12,6 +12,8 @@ import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -87,7 +89,6 @@ public class JdbcLinkTest extends IntegrationTest {
 
     }
 
-
     @Test
     @Transactional
     @Rollback
@@ -95,16 +96,17 @@ public class JdbcLinkTest extends IntegrationTest {
     public void addLinkTest() {
         chatRepository.add(100L);
         chatRepository.add(200L);
-        linkRepository.add(100L,"matvey.com");
-        linkRepository.add(100L,"gasnikov.ru");
-        linkRepository.add(200L,"aleksey.ru");
-        List<Link> links=linkRepository.findAll();
+        linkRepository.add(100L, "matvey.com");
+        linkRepository.add(100L, "gasnikov.ru");
+        linkRepository.add(200L, "aleksey.ru");
+        List<Link> links = linkRepository.findAll();
         assertThat(links.get(1).getUri()).isEqualTo("gasnikov.ru");
         assertThat(links.get(2).getUri()).isEqualTo("aleksey.ru");
         chatRepository.remove(100L);
         chatRepository.remove(200L);
 
     }
+
     @Test
     @Transactional
     @Rollback
@@ -112,11 +114,11 @@ public class JdbcLinkTest extends IntegrationTest {
     public void findLinksByChatIdTest() {
         chatRepository.add(100L);
         chatRepository.add(200L);
-        linkRepository.add(100L,"matvey.com");
-        linkRepository.add(200L,"gasnikov.ru");
-        linkRepository.add(100L,"aleksey.ru");
-        List<Link> links=linkRepository.findLinksByChatId(100L);
-        assertEquals(links.size(),2);
+        linkRepository.add(100L, "matvey.com");
+        linkRepository.add(200L, "gasnikov.ru");
+        linkRepository.add(100L, "aleksey.ru");
+        List<Link> links = linkRepository.findLinksByChatId(100L);
+        assertEquals(links.size(), 2);
         assertThat(links.get(0).getUri()).isEqualTo("matvey.com");
         assertThat(links.get(1).getUri()).isEqualTo("aleksey.ru");
         chatRepository.remove(100L);
@@ -131,17 +133,18 @@ public class JdbcLinkTest extends IntegrationTest {
     public void removeLinkTest() {
         chatRepository.add(100L);
         chatRepository.add(200L);
-        linkRepository.add(100L,"matvey.com");
-        linkRepository.add(200L,"gasnikov.ru");
-        linkRepository.add(100L,"aleksey.ru");
-        linkRepository.remove(100L,"aleksey.ru");
-        List<Link> links=linkRepository.findLinksByChatId(100L);
-        assertEquals(links.size(),1);
+        linkRepository.add(100L, "matvey.com");
+        linkRepository.add(200L, "gasnikov.ru");
+        linkRepository.add(100L, "aleksey.ru");
+        linkRepository.remove(100L, "aleksey.ru");
+        List<Link> links = linkRepository.findLinksByChatId(100L);
+        assertEquals(links.size(), 1);
         assertThat(links.get(0).getUri()).isEqualTo("matvey.com");
         chatRepository.remove(100L);
         chatRepository.remove(200L);
 
     }
+
     @Test
     @Transactional
     @Rollback
@@ -149,18 +152,19 @@ public class JdbcLinkTest extends IntegrationTest {
     public void findLinkByChatIdAndUrlTest() {
         chatRepository.add(100L);
         chatRepository.add(200L);
-        linkRepository.add(100L,"matvey.com");
-        linkRepository.add(200L,"gasnikov.ru");
-        linkRepository.add(100L,"aleksey.ru");
-        linkRepository.remove(100L,"aleksey.ru");
-        Optional<Link> link=linkRepository.findByChatIdAndUrl(100L,"matvey.com");
-        Optional<Link> emptyLink=linkRepository.findByChatIdAndUrl(100L,"gasnikov.ru");
+        linkRepository.add(100L, "matvey.com");
+        linkRepository.add(200L, "gasnikov.ru");
+        linkRepository.add(100L, "aleksey.ru");
+        linkRepository.remove(100L, "aleksey.ru");
+        Optional<Link> link = linkRepository.findByChatIdAndUrl(100L, "matvey.com");
+        Optional<Link> emptyLink = linkRepository.findByChatIdAndUrl(100L, "gasnikov.ru");
         assertTrue(link.isPresent());
         assertTrue(emptyLink.isEmpty());
         chatRepository.remove(100L);
         chatRepository.remove(200L);
 
     }
+
     @Test
     @Transactional
     @Rollback
@@ -168,10 +172,10 @@ public class JdbcLinkTest extends IntegrationTest {
     public void findByUriTest() {
         chatRepository.add(100L);
         chatRepository.add(200L);
-        linkRepository.add(100L,"matvey.com");
-        linkRepository.add(200L,"gasnikov.ru");
-        linkRepository.add(100L,"aleksey.ru");
-        linkRepository.remove(100L,"aleksey.ru");
+        linkRepository.add(100L, "matvey.com");
+        linkRepository.add(200L, "gasnikov.ru");
+        linkRepository.add(100L, "aleksey.ru");
+        linkRepository.remove(100L, "aleksey.ru");
         Optional<Link> link = linkRepository.findByUri("matvey.com");
         Optional<Link> emptyLink = linkRepository.findByUri("matv.com");
         assertTrue(link.isPresent());
@@ -181,10 +185,24 @@ public class JdbcLinkTest extends IntegrationTest {
 
     }
 
+    @Test
+    @Transactional
+    @Rollback
+    @DisplayName("updateLastCheck")
+    public void updateLastCheckTest() {
+        chatRepository.add(100L);
+        chatRepository.add(200L);
+        linkRepository.add(100L, "matvey.com");
+        linkRepository.add(200L, "gasnikov.ru");
+        linkRepository.add(200L, "matvey.com");
+        OffsetDateTime dateTime = OffsetDateTime.of(2024, 2, 23, 10, 25, 43, 0, ZoneOffset.UTC);
+        linkRepository.updateLastCheck(dateTime, "matvey.com");
+        Optional<Link> link = linkRepository.findByChatIdAndUrl(100L, "matvey.com");
+        assertTrue(link.isPresent());
+        assertEquals(link.get().getLastCheck().toLocalDateTime(), dateTime.toLocalDateTime());
+        chatRepository.remove(100L);
+        chatRepository.remove(200L);
 
-
-
-
-
+    }
 
 }

@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class TrackCommandHandler implements Command {
     private CommandUtils commandUtils;
+
     @Override
     public String name() {
         return "/track";

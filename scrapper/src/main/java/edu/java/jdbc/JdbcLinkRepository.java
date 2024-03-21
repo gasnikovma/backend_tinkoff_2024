@@ -2,15 +2,16 @@ package edu.java.jdbc;
 
 import edu.java.models.dto.Link;
 import edu.java.repository.LinkRepository;
+import java.time.OffsetDateTime;
+import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import java.time.OffsetDateTime;
-import java.util.List;
-import java.util.Optional;
 
 @Repository
+@SuppressWarnings("MultipleStringLiterals")
 @RequiredArgsConstructor
 public class JdbcLinkRepository implements LinkRepository {
     private final JdbcTemplate jdbcTemplate;
@@ -21,9 +22,14 @@ public class JdbcLinkRepository implements LinkRepository {
         Optional<Link> link = findByUri(uri);
         long id;
         if (link.isEmpty()) {
-            jdbcTemplate.update("INSERT INTO link(uri, last_update_at,last_check_at) VALUES(?,?,?)", uri, OffsetDateTime.MIN,OffsetDateTime.MIN);
+            jdbcTemplate.update(
+                "INSERT INTO link(uri, last_update_at,last_check_at) VALUES(?,?,?)",
+                uri,
+                OffsetDateTime.MIN,
+                OffsetDateTime.MIN
+            );
             List<Link> allLinks = findAll();
-            id = allLinks.get(allLinks.size()-1).getId();
+            id = allLinks.get(allLinks.size() - 1).getId();
         } else {
             id = link.get().getId();
         }
