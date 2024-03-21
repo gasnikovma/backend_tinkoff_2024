@@ -2,7 +2,6 @@ package edu.java.jdbc;
 
 import edu.java.models.dto.Link;
 import edu.java.repository.LinkRepository;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -22,7 +21,7 @@ public class JdbcLinkRepository implements LinkRepository {
         Optional<Link> link = findByUri(uri);
         long id;
         if (link.isEmpty()) {
-            jdbcTemplate.update("INSERT INTO link(url, last_update_at,last_check_at) VALUES(?,?,?)", uri, OffsetDateTime.MIN,OffsetDateTime.MIN);
+            jdbcTemplate.update("INSERT INTO link(uri, last_update_at,last_check_at) VALUES(?,?,?)", uri, OffsetDateTime.MIN,OffsetDateTime.MIN);
             List<Link> allLinks = findAll();
             id = allLinks.get(allLinks.size()-1).getId();
         } else {
@@ -40,7 +39,7 @@ public class JdbcLinkRepository implements LinkRepository {
             (resultSet, row) ->
                 new Link(
                     resultSet.getLong("id"),
-                    resultSet.getString("url"),
+                    resultSet.getString("uri"),
                     resultSet.getObject(
                         "last_check_at",
                         OffsetDateTime.class
@@ -59,7 +58,7 @@ public class JdbcLinkRepository implements LinkRepository {
             (resultSet, row) ->
                 new Link(
                     resultSet.getLong("id"),
-                    resultSet.getString("url"),
+                    resultSet.getString("uri"),
                     resultSet.getObject(
                         "last_check_at",
                         OffsetDateTime.class
@@ -77,7 +76,7 @@ public class JdbcLinkRepository implements LinkRepository {
         long id = link.get().getId();
         jdbcTemplate.update("DELETE FROM chat_link WHERE chat_id = (?) AND link_id = (?)", chatId, id);
         List<Long> chats = findChatsByLink(uri);
-        if (!chats.isEmpty()) {
+        if (chats.isEmpty()) {
             jdbcTemplate.update("DELETE FROM link WHERE id = (?)", id);
         }
         return link.get();
@@ -88,11 +87,11 @@ public class JdbcLinkRepository implements LinkRepository {
     @Transactional
     public Optional<Link> findByChatIdAndUrl(long id, String uri) {
         List<Link> links = jdbcTemplate.query(
-            "SELECT DISTINCT * FROM chat_link c JOIN link l ON c.link_id = l.id WHERE c.chat_id = ? AND l.url = ?",
+            "SELECT DISTINCT * FROM chat_link c JOIN link l ON c.link_id = l.id WHERE c.chat_id = ? AND l.uri = ?",
             (resultSet, row) ->
                 new Link(
                     resultSet.getLong("id"),
-                    resultSet.getString("url"),
+                    resultSet.getString("uri"),
                     resultSet.getObject(
                         "last_check_at",
                         OffsetDateTime.class
@@ -113,7 +112,7 @@ public class JdbcLinkRepository implements LinkRepository {
     @Transactional
     public List<Long> findChatsByLink(String uri) {
         return jdbcTemplate.query(
-            "SELECT DISTINCT c.chat_id FROM chat_link c JOIN link l ON l.id = c.link_id WHERE l.url = (?)",
+            "SELECT DISTINCT c.chat_id FROM chat_link c JOIN link l ON l.id = c.link_id WHERE l.uri = (?)",
             (resultSet, row) -> resultSet.getLong("chat_id"),
             uri
         );
@@ -124,11 +123,11 @@ public class JdbcLinkRepository implements LinkRepository {
     @Transactional
     public Optional<Link> findByUri(String uri) {
         List<Link> links = jdbcTemplate.query(
-            "SELECT * FROM link WHERE url = ?",
+            "SELECT * FROM link WHERE uri = ?",
             (resultSet, row) ->
                 new Link(
                     resultSet.getLong("id"),
-                    resultSet.getString("url"),
+                    resultSet.getString("uri"),
                     resultSet.getObject(
                         "last_check_at",
                         OffsetDateTime.class
@@ -147,7 +146,7 @@ public class JdbcLinkRepository implements LinkRepository {
             (resultSet, row) ->
                 new Link(
                     resultSet.getLong("id"),
-                    resultSet.getString("url"),
+                    resultSet.getString("uri"),
                     resultSet.getObject(
                         "last_check_at",
                         OffsetDateTime.class
@@ -161,12 +160,12 @@ public class JdbcLinkRepository implements LinkRepository {
     @Override
     @Transactional
     public void updateLastCheck(OffsetDateTime check, String uri) {
-        jdbcTemplate.update("UPDATE link SET last_check_at = (?) WHERE url = (?)", check, uri);
+        jdbcTemplate.update("UPDATE link SET last_check_at = (?) WHERE uri = (?)", check, uri);
     }
 
     @Override
     @Transactional
     public void updateLastUpdate(OffsetDateTime check, String uri) {
-        jdbcTemplate.update("UPDATE link SET last_update_at = (?) WHERE url = (?)", check, uri);
+        jdbcTemplate.update("UPDATE link SET last_update_at = (?) WHERE uri = (?)", check, uri);
     }
 }

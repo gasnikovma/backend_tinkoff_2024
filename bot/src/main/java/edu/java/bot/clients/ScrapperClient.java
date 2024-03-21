@@ -2,16 +2,13 @@ package edu.java.bot.clients;
 
 import edu.java.bot.models.request.AddLinkRequest;
 import edu.java.bot.models.request.RemoveLinkRequest;
-import edu.java.bot.models.response.ApiErrorResponse;
 import edu.java.bot.models.response.LinkResponse;
 import edu.java.bot.models.response.ListLinksResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
 
 @Slf4j
 public class ScrapperClient {
@@ -46,10 +43,11 @@ public class ScrapperClient {
     }
 
     public ResponseEntity<ListLinksResponse> getLinks(long chatId) {
-        return this.webClient.get()
+       return this.webClient.get()
             .uri(urlLinks).header(headerTgChat, String.valueOf(chatId))
             .retrieve()
             .toEntity(ListLinksResponse.class).block();
+
 
     }
 

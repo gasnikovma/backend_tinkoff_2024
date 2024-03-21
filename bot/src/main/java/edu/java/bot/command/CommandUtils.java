@@ -46,17 +46,22 @@ public class CommandUtils {
     }
 
     public SendMessage getLinks(Update update) {
-        ListLinksResponse linkResponse = scrapperClient.getLinks(update.message().chat().id()).getBody();
-        if (linkResponse.size() == 0) {
-            return new SendMessage(update.message().chat().id(), "No links yet!");
+        try {
+            ListLinksResponse linkResponse = scrapperClient.getLinks(update.message().chat().id()).getBody();
+            if (linkResponse.size() == 0) {
+                return new SendMessage(update.message().chat().id(), "No links yet!");
+            }
+            StringBuilder subscribedLinksResponse = new StringBuilder();
+            subscribedLinksResponse.append("List of tracked links:").append("\n");
+            List<LinkResponse> linkResponses = linkResponse.linkResponses();
+            for (LinkResponse link : linkResponses) {
+                subscribedLinksResponse.append(link.uri()).append("\n");
+            }
+            return new SendMessage(update.message().chat().id(), subscribedLinksResponse.toString());
         }
-        StringBuilder subscribedLinksResponse = new StringBuilder();
-        subscribedLinksResponse.append("List of tracked links:").append("\n");
-        List<LinkResponse> linkResponses = linkResponse.linkResponses();
-        for (LinkResponse link : linkResponses) {
-            subscribedLinksResponse.append(link.uri()).append("\n");
+        catch (Exception e){
+            return new SendMessage(update.message().chat().id(), "You are not registered!");
         }
-        return new SendMessage(update.message().chat().id(), subscribedLinksResponse.toString());
 
     }
 
