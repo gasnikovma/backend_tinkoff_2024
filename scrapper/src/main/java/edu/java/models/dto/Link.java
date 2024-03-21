@@ -8,7 +8,7 @@ import java.time.OffsetDateTime;
 @AllArgsConstructor
 public class Link {
     private long id;
-    private String name;
+    private String uri;
     private OffsetDateTime lastCheck;
     private OffsetDateTime lastUpdate;
 }

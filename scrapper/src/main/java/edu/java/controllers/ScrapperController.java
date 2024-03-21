@@ -16,10 +16,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -99,7 +97,7 @@ public class ScrapperController {
         List<Link> links = linkService.allLinks(chatId);
         List<LinkResponse> linkResponses = new ArrayList<>();
         for (int i = 0; i < links.size(); i++) {
-            linkResponses.add(new LinkResponse(links.get(i).getId(), links.get(i).getName()));
+            linkResponses.add(new LinkResponse(links.get(i).getId(), links.get(i).getUri()));
         }
         return new ListLinksResponse(linkResponses, links.size());
 
@@ -129,7 +127,7 @@ public class ScrapperController {
     ) {
 
         Link link = linkService.add(chatId, URI.create(addLinkRequest.uri()));
-        return new LinkResponse(link.getId(), link.getName());
+        return new LinkResponse(link.getId(), link.getUri());
     }
 
     @Operation(summary = "Убрать отслеживание ссылки")
@@ -155,7 +153,7 @@ public class ScrapperController {
     RemoveLinkRequest removeLinkRequest
     ) {
         Link link = linkService.remove(chatId, URI.create(removeLinkRequest.uri()));
-        return new LinkResponse(link.getId(), link.getName());
+        return new LinkResponse(link.getId(), link.getUri());
     }
 
 }
