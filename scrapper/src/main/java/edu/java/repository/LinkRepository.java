@@ -26,4 +26,6 @@ public interface LinkRepository {
 
     void updateLastUpdate(OffsetDateTime check, String name);
 
+    List<Link> getOldestLinks(int limit);
+
 }

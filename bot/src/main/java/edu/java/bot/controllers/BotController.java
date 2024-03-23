@@ -41,7 +41,7 @@ public class BotController {
         List<Long> chats = linkUpdateRequest.tgChatIds();
         log.info(chats.toString());
         for (Long chatId : chats) {
-            bot.execute(new SendMessage(chatId, linkUpdateRequest.description()));
+            bot.execute(new SendMessage(chatId, linkUpdateRequest.description()+linkUpdateRequest.uri()));
         }
         return ResponseEntity.ok().build();
     }

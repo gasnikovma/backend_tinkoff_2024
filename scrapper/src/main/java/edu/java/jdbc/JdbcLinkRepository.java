@@ -174,4 +174,18 @@ public class JdbcLinkRepository implements LinkRepository {
     public void updateLastUpdate(OffsetDateTime check, String uri) {
         jdbcTemplate.update("UPDATE link SET last_update_at = (?) WHERE uri = (?)", check, uri);
     }
+
+    @Override
+    @Transactional
+    public List<Link> getOldestLinks(int limit) {
+        return jdbcTemplate.query("SELECT * FROM link ORDER BY last_check_at LIMIT (?)", (resultSet, row) -> new Link(
+            resultSet.getLong("id"),
+            resultSet.getString("uri"),
+            resultSet.getObject(
+                "last_check_at",
+                OffsetDateTime.class
+            ),
+            resultSet.getObject("last_update_at", OffsetDateTime.class)
+        ),limit);
+    }
 }
