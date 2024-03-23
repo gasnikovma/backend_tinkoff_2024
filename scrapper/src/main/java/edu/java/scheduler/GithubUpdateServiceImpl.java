@@ -27,12 +27,12 @@ public class GithubUpdateServiceImpl implements UpdateService {
         try {
             GithubResponse githubResponse = githubClient.receiveRepo(uri[uri.length - 2], uri[uri.length - 1]).block();
             linkRepository.updateLastCheck(OffsetDateTime.of(LocalDateTime.now(), ZoneOffset.UTC), link.getUri());
+            log.info(githubResponse.pushed().toString());
+            log.info(link.getLastUpdate().toString());
             if (OffsetDateTime.MIN.equals(link.getLastUpdate())) {
-                log.info("только начали отслеживать");
-                linkRepository.updateLastUpdate(githubResponse.updated(), link.getUri());
-            } else if (githubResponse.updated().isAfter(link.getLastUpdate())) {
-                log.info("запушили ");
-                linkRepository.updateLastUpdate(githubResponse.updated(), link.getUri());
+                linkRepository.updateLastUpdate(githubResponse.pushed(), link.getUri());
+            } else if (githubResponse.pushed().isAfter(link.getLastUpdate())) {
+                linkRepository.updateLastUpdate(githubResponse.pushed(), link.getUri());
                 botClient.update(
                     link.getId(),
                     link.getUri(),
