@@ -52,7 +52,6 @@ public class ScrapperClient {
     }
 
    public ResponseEntity<LinkResponse> addLink(long chatId, String uri) {
-
         return this.webClient.post()
             .uri(urlLinks)
             .header(headerTgChat, String.valueOf(chatId))

@@ -186,6 +186,6 @@ public class JdbcLinkRepository implements LinkRepository {
                 OffsetDateTime.class
             ),
             resultSet.getObject("last_update_at", OffsetDateTime.class)
-        ),limit);
+        ), limit);
     }
 }

@@ -14,7 +14,6 @@ public class LinkUpdateScheduler {
 
     @Scheduled(fixedDelayString = "#{@interval. toMillis()}")
     public void update() {
-        log.info("Scheduler service Working!");
-     schedulerService.update();
+        schedulerService.update();
     }
 }

@@ -4,5 +4,5 @@ import edu.java.models.dto.Link;
 
 public interface UpdateService {
     void update(Link link);
-    boolean isCorrectUri(String url);
+
 }

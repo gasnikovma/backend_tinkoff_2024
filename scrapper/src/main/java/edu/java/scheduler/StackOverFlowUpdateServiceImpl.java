@@ -5,12 +5,12 @@ import edu.java.clients.StackOverflowClient;
 import edu.java.models.StackOverflowResponse;
 import edu.java.models.dto.Link;
 import edu.java.repository.LinkRepository;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
@@ -23,19 +23,28 @@ public class StackOverFlowUpdateServiceImpl implements UpdateService {
     @Override
     public void update(Link link) {
         String[] uri = link.getUri().split("/");
-        try{
-        StackOverflowResponse stackOverflowResponse = stackOverflowClient.receiveRepo(Long.valueOf(uri[uri.length-2])).block();
-           // log.info(stackOverflowResponse.itemsResponses().get(0).questionId().toString());
+        try {
+            StackOverflowResponse stackOverflowResponse =
+                stackOverflowClient.receiveRepo(Long.valueOf(uri[uri.length - 2])).block();
+
             linkRepository.updateLastCheck(OffsetDateTime.of(LocalDateTime.now(), ZoneOffset.UTC), link.getUri());
             if (OffsetDateTime.MIN.equals(link.getLastUpdate())) {
-                linkRepository.updateLastUpdate(stackOverflowResponse.itemsResponses().get(0).lastActivityDate(), link.getUri());
+                linkRepository.updateLastUpdate(
+                    stackOverflowResponse.itemsResponses().get(0).lastActivityDate(),
+                    link.getUri()
+                );
             } else if (stackOverflowResponse.itemsResponses().get(0).lastActivityDate().isAfter(link.getLastUpdate())) {
 
-                linkRepository.updateLastUpdate(stackOverflowResponse.itemsResponses().get(0).lastActivityDate(), link.getUri());
-                botClient.update(link.getId(),
+                linkRepository.updateLastUpdate(
+                    stackOverflowResponse.itemsResponses().get(0).lastActivityDate(),
+                    link.getUri()
+                );
+                botClient.update(
+                    link.getId(),
                     link.getUri(),
                     "New update from website:",
-                    linkRepository.findChatsByLink(link.getUri()));
+                    linkRepository.findChatsByLink(link.getUri())
+                );
 
             }
 
@@ -44,8 +53,4 @@ public class StackOverFlowUpdateServiceImpl implements UpdateService {
         }
     }
 
-    @Override
-    public boolean isCorrectUri(String url) {
-        return url.startsWith("https://stackoverflow.com/questions/");
-    }
 }
