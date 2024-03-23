@@ -12,7 +12,8 @@ import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-@Service @AllArgsConstructor public class LinkServiceImpl implements LinkService {
+@Service @AllArgsConstructor
+public class LinkServiceImpl implements LinkService {
 
     private final LinkRepository linkRepository;
     private final ChatRepository chatRepository;

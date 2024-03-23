@@ -1,4 +1,4 @@
-package edu.java.jdbc;
+package edu.java.repository.jdbc;
 
 import edu.java.models.dto.Chat;
 import edu.java.repository.ChatRepository;

@@ -1,9 +1,9 @@
 package edu.java.scrapper;
 
-import edu.java.jdbc.JdbcChatRepository;
-import edu.java.jdbc.JdbcLinkRepository;
 import edu.java.models.dto.Chat;
 import edu.java.models.dto.Link;
+import edu.java.repository.jdbc.JdbcChatRepository;
+import edu.java.repository.jdbc.JdbcLinkRepository;
 import edu.java.repository.ChatRepository;
 import edu.java.repository.LinkRepository;
 import org.junit.jupiter.api.DisplayName;
