@@ -88,6 +88,8 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <!-- Database -->
+
         <dependency>
             <groupId>org.wiremock</groupId>
             <artifactId>wiremock-standalone</artifactId>
