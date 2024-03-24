@@ -6,6 +6,8 @@ import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.Service;
+import edu.java.bot.command.Command;
+import edu.java.bot.command.CommandUtils;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -15,14 +17,18 @@ import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.testcontainers.shaded.org.checkerframework.checker.units.qual.C;
 import java.lang.reflect.Field;
+import java.util.List;
 import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class ServiceTest {
     @Mock TelegramBot bot;
+
 
     @InjectMocks
     Service botService;
@@ -36,7 +42,6 @@ public class ServiceTest {
         Update update = new Update();
         Message message = new Message();
         Chat chat = new Chat();
-
         Field messageProperty = message.getClass().getDeclaredField("text");
         messageProperty.setAccessible(true);
         messageProperty.set(message, command);
@@ -52,9 +57,9 @@ public class ServiceTest {
         Field updateProprety = update.getClass().getDeclaredField("message");
         updateProprety.setAccessible(true);
         updateProprety.set(update, message);
-
         botService.handleUpdates(update);
         verify(bot).execute(captor.capture());
+
         SendMessage sendMessage = captor.getValue();
         assertEquals(sendMessage.getParameters().get("text"), answer);
 

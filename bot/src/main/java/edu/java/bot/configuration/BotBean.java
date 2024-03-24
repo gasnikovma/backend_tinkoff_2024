@@ -11,4 +11,5 @@ public class BotBean {
         return applicationConfig.telegramToken() != null ? new TelegramBot(applicationConfig.telegramToken()) : null;
     }
 
+
 }
