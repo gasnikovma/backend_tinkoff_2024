@@ -8,7 +8,9 @@ import edu.java.repository.ChatRepository;
 import edu.java.repository.LinkRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jdbc.DataSourceBuilder;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,15 +21,21 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
-public class JdbcLinkTest extends IntegrationTest {
+@SpringBootTest
+public class JdbcTest extends IntegrationTest {
     private static final JdbcTemplate jdbcTemplate =
         new JdbcTemplate(DataSourceBuilder.create().url(POSTGRES.getJdbcUrl()).username(POSTGRES.getUsername())
             .password(POSTGRES.getPassword()).build());
 
-    private ChatRepository chatRepository = new JdbcChatRepository(jdbcTemplate);
+    private ChatRepository chatRepository;
+    private LinkRepository linkRepository;
 
-    private LinkRepository linkRepository = new JdbcLinkRepository(jdbcTemplate);
+    @Autowired
+    public JdbcTest(){
+        chatRepository = new JdbcChatRepository(jdbcTemplate);
+        linkRepository = new JdbcLinkRepository(jdbcTemplate);
+    }
+
 
     @Test
     @Transactional
