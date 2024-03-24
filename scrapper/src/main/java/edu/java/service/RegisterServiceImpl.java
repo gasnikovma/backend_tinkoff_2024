@@ -3,12 +3,12 @@ package edu.java.service;
 import edu.java.exceptions.ChatAlreadyExistsException;
 import edu.java.exceptions.NoChatException;
 import edu.java.repository.ChatRepository;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class RegisterServiceImpl implements RegisterService {
     private final ChatRepository chatRepository;
 

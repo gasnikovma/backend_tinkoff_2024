@@ -28,6 +28,8 @@ public class StackOverFlowUpdateServiceImpl implements UpdateService {
                 stackOverflowClient.receiveRepo(Long.valueOf(uri[uri.length - 2])).block();
 
             linkRepository.updateLastCheck(OffsetDateTime.of(LocalDateTime.now(), ZoneOffset.UTC), link.getUri());
+            log.info(stackOverflowResponse.itemsResponses().get(0).lastActivityDate().toString());
+            log.info(link.getLastUpdate().toString());
             if (OffsetDateTime.MIN.equals(link.getLastUpdate())) {
                 linkRepository.updateLastUpdate(
                     stackOverflowResponse.itemsResponses().get(0).lastActivityDate(),

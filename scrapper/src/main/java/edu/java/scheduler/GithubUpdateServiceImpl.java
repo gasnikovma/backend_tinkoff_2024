@@ -27,6 +27,7 @@ public class GithubUpdateServiceImpl implements UpdateService {
         try {
             GithubResponse githubResponse = githubClient.receiveRepo(uri[uri.length - 2], uri[uri.length - 1]).block();
             linkRepository.updateLastCheck(OffsetDateTime.of(LocalDateTime.now(), ZoneOffset.UTC), link.getUri());
+            log.info("update last check");
             log.info(githubResponse.pushed().toString());
             log.info(link.getLastUpdate().toString());
             if (OffsetDateTime.MIN.equals(link.getLastUpdate())) {
@@ -39,7 +40,6 @@ public class GithubUpdateServiceImpl implements UpdateService {
                     "New update from website:",
                     linkRepository.findChatsByLink(link.getUri())
                 );
-                //link.setLastUpdate(githubResponse.updated());
 
             }
 

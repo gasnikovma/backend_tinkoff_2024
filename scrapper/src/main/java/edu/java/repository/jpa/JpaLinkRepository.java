@@ -30,8 +30,8 @@ public interface JpaLinkRepository extends JpaRepository<Link, Long> {
     @Query("SELECT l FROM Link l JOIN l.chatEntities c WHERE c.id = :chatId AND l.uri = :linkUri")
     List<Link> findLinkByChatIdAndUri(@Param("chatId") long chatId, @Param("linkUri") String linkUri);
 
-    /* @Modifying
-     @Query("SELECT l FROM Link l ORDER BY l.lastCheck")
-     List<Link> getOldestLinks(int limit);*/
-    List<Link> findTopByNByOrderBOrderByLastCheckAsc(int limit);
+    @Modifying
+    @Query(value = "SELECT * FROM link ORDER BY last_check_at LIMIT :limit", nativeQuery = true)
+    List<Link> getOldestLinks(@Param("limit") int limit);
+
 }

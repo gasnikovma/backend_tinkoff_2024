@@ -21,9 +21,16 @@ import lombok.NoArgsConstructor;
 
     @Column(name = "uri") private String uri;
     @Column(name = "last_update_at") private OffsetDateTime lastUpdate;
-    @Column(name = "last_check_at") private OffsetDateTime lastCheck;
+    @Column(name = "last_check_at")
+    private OffsetDateTime lastCheck;
     @ManyToMany(mappedBy = "linkEntities")
     private List<Chat> chatEntities;
+
+    public Link(Long id, String uri, OffsetDateTime lastCheck) {
+        this.id = id;
+        this.uri = uri;
+        this.lastCheck = lastCheck;
+    }
 
     public Link(Long id, String uri, OffsetDateTime lastCheck, OffsetDateTime lastUpdate) {
         this.id = id;

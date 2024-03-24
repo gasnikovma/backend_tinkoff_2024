@@ -6,12 +6,12 @@ import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
 
-@Service
 @RequiredArgsConstructor
-public class JpaLinkRepositoryImpl implements LinkRepository {
+@Slf4j
+public class DefJpaLinkRepository implements LinkRepository {
     private final JpaLinkRepository jpaLinkRepository;
 
     @Override
@@ -22,8 +22,8 @@ public class JpaLinkRepositoryImpl implements LinkRepository {
         if (link.isPresent()) {
             link1 = link.get();
         } else {
-            link1 = new Link(id, uri, OffsetDateTime.MIN, OffsetDateTime.MIN);
-            jpaLinkRepository.save(link1);
+            link1 = new Link(id, uri, OffsetDateTime.now(), OffsetDateTime.now());
+            link1 = jpaLinkRepository.save(link1);
         }
         jpaLinkRepository.saveLinkForChat(id, link1.getId());
         return link1;
@@ -96,7 +96,7 @@ public class JpaLinkRepositoryImpl implements LinkRepository {
     @Transactional
     public void updateLastUpdate(OffsetDateTime check, String uri) {
         Link link = jpaLinkRepository.findByUri(uri).get();
-        link.setLastCheck(check);
+        link.setLastUpdate(check);
         jpaLinkRepository.save(link);
 
     }
@@ -104,6 +104,6 @@ public class JpaLinkRepositoryImpl implements LinkRepository {
     @Override
     @Transactional
     public List<Link> getOldestLinks(int limit) {
-        return jpaLinkRepository.findTopByNByOrderBOrderByLastCheckAsc(limit);
+        return jpaLinkRepository.getOldestLinks(limit);
     }
 }

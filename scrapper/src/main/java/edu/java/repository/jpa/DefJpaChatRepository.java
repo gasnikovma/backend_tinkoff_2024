@@ -1,22 +1,24 @@
 package edu.java.repository.jpa;
 
-import edu.java.exceptions.NoChatException;
+import edu.java.exceptions.ChatAlreadyExistsException;
 import edu.java.models.dto.Chat;
 import edu.java.repository.ChatRepository;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
 
-@RequiredArgsConstructor @Service public class JpaChatRepositoryImpl implements ChatRepository {
+@RequiredArgsConstructor
+@Slf4j
+public class DefJpaChatRepository implements ChatRepository {
 
     private final JpaChatRepository jpaChatRepository;
 
     @Override @Transactional public void add(long id) {
-        Optional<edu.java.models.dto.Chat> chat = findById(id);
+        Optional<Chat> chat = findById(id);
         if (chat.isPresent()) {
-            throw new NoChatException("The chat is not registered!");
+            throw new ChatAlreadyExistsException("The chat is already registered!");
         }
         jpaChatRepository.save(new Chat(id));
     }

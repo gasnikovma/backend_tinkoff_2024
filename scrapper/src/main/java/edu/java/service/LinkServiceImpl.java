@@ -12,11 +12,16 @@ import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-@Service @AllArgsConstructor
+@Service
+@AllArgsConstructor
 public class LinkServiceImpl implements LinkService {
 
     private final LinkRepository linkRepository;
     private final ChatRepository chatRepository;
+
+
+
+
     private final String noChatExceptionMessage = "This chat is not registered!";
 
     @Override public Link add(long chatId, URI url) {
