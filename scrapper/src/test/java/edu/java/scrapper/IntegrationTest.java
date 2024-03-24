@@ -10,8 +10,10 @@ import liquibase.exception.DatabaseException;
 import liquibase.exception.LiquibaseException;
 import liquibase.resource.ClassLoaderResourceAccessor;
 import org.junit.jupiter.api.Test;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
+import org.springframework.transaction.annotation.Transactional;
 import org.testcontainers.containers.JdbcDatabaseContainer;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -22,7 +24,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@Testcontainers public  class IntegrationTest {
+@Testcontainers public class IntegrationTest {
     public static PostgreSQLContainer<?> POSTGRES;
 
     static {
@@ -55,23 +57,30 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
         registry.add("spring.datasource.password", POSTGRES::getPassword);
     }
 
-    @Test void testDatabaseConnection() throws SQLException {
-/*
+    @Test
+    void testDatabaseConnection() throws SQLException {
+
         String jdbcUrl = POSTGRES.getJdbcUrl();
         String username = POSTGRES.getUsername();
         String password = POSTGRES.getPassword();
         try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password)) {
-            PreparedStatement insertRequest = connection.prepareStatement("INSERT INTO Chat(tg_chat_id) VALUES (?)");
-            insertRequest.setInt(1, 61);
+            PreparedStatement insertRequest =
+                connection.prepareStatement("INSERT INTO chat(id) VALUES (?)");
+            insertRequest.setLong(1, 10L);
             insertRequest.execute();
-            PreparedStatement selectRequest = connection.prepareStatement("SELECT tg_chat_id FROM Chat Where id =(?)");
-            selectRequest.setInt(1, 1);
+            PreparedStatement selectRequest =
+                connection.prepareStatement("SELECT * FROM chat Where id =(?)");
+            selectRequest.setLong(1, 10L);
             selectRequest.execute();
             ResultSet resultSet = selectRequest.getResultSet();
             resultSet.next();
-            assertEquals(resultSet.getInt(1), 61);
+            assertEquals(resultSet.getInt(1), 10L);
+            PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM chat WHERE id = ?");
+            preparedStatement.setLong(1,10L);
+            preparedStatement.executeUpdate();
+
 
         }
-*/
+
     }
 }
