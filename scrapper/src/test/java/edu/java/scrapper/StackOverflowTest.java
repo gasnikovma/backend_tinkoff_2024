@@ -13,6 +13,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.util.retry.Retry;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
@@ -22,17 +23,18 @@ import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.options;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-/*@SpringBootTest
 public class StackOverflowTest {
     private WireMockServer wireMockServer;
     private StackOverflowClient stackOverflowClient;
-    @Autowired
+
     private Retry retry;
 
     @BeforeEach
     public void setup() {
         wireMockServer = new WireMockServer(options().dynamicPort());
         wireMockServer.start();
+        retry = Retry.fixedDelay(1,
+            Duration.ofMillis(500));
         WireMock.configureFor("localhost", wireMockServer.port());
         WebClient.Builder webClientBuilder = WebClient.builder();
         stackOverflowClient = new StackOverflowClient(webClientBuilder, wireMockServer.baseUrl(), retry);
@@ -70,4 +72,3 @@ public class StackOverflowTest {
     }
 
 }
-*/

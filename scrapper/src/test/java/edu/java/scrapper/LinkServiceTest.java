@@ -28,7 +28,7 @@ public class LinkServiceTest {
     URI uri,uri_1,uri_2;
     Link link,link_1,link_2;
 
-    /*  @BeforeEach
+     @BeforeEach
     public void init() {
         uri = URI.create("https://github.com/gasnikovma");
         uri_1=URI.create("https://github.com/iceberg");
@@ -77,5 +77,5 @@ public class LinkServiceTest {
         verify(linkRepository).findLinksByChatId(100L);
 
 
-    }*/
+    }
 }
