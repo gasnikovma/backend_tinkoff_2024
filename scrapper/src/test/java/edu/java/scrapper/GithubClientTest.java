@@ -3,6 +3,7 @@ package edu.java.scrapper;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import edu.java.models.GithubResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import edu.java.clients.GithubClient;
 import org.junit.jupiter.api.AfterEach;
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.util.retry.Retry;
 import java.time.OffsetDateTime;
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
@@ -22,6 +24,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class GithubClientTest {
     private WireMockServer wireMockServer;
     private GithubClient githubClient;
+    @Autowired
+    private Retry retry;
 
     @BeforeEach
     public void setup() {
@@ -29,7 +33,7 @@ public class GithubClientTest {
         wireMockServer.start();
         WireMock.configureFor("localhost", wireMockServer.port());
         WebClient.Builder webClientBuilder = WebClient.builder();
-        githubClient = new GithubClient(webClientBuilder, wireMockServer.baseUrl());
+        githubClient = new GithubClient(webClientBuilder, wireMockServer.baseUrl(),retry);
 
     }
 
