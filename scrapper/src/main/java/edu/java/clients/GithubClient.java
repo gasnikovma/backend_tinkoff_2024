@@ -28,8 +28,8 @@ public class GithubClient {
             .get()
             .uri("/repos/{owner}/{repo}", owner, repo)
             .retrieve()
-            .onStatus(HttpStatusCode::is5xxServerError,response->Mono.error(new ServiceException(
-                "Server exception",response.statusCode().value())))
+            .onStatus(HttpStatusCode::is5xxServerError, response -> Mono.error(new ServiceException(
+                "Server exception", response.statusCode().value())))
             .bodyToMono(GithubResponse.class)
             .retryWhen(retry);
 

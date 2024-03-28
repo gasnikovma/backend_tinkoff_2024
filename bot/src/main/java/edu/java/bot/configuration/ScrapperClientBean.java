@@ -10,8 +10,7 @@ import reactor.util.retry.Retry;
 public class ScrapperClientBean {
     @Bean
     public ScrapperClient scrapperClient(WebClient.Builder webClientBuilder, Retry retry) {
-        return new ScrapperClient(webClientBuilder,retry);
+        return new ScrapperClient(webClientBuilder, retry);
     }
-
 
 }

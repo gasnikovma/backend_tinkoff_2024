@@ -16,6 +16,7 @@ public class DatabaseConfig {
     private String username;
     @Value("${spring.datasource.password}")
     private String password;
+
     @Bean
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();

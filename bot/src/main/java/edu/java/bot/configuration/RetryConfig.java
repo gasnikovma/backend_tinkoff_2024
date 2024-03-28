@@ -1,17 +1,16 @@
 package edu.java.bot.configuration;
 
 import edu.java.bot.exception.ServiceException;
+import java.time.Duration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.util.retry.Retry;
-import reactor.util.retry.RetryBackoffSpec;
-import java.time.Duration;
 
 @Configuration
+@SuppressWarnings("InnerTypeLast")
 public class RetryConfig {
 
     public static class RetryIteration {
@@ -24,7 +23,6 @@ public class RetryConfig {
         }
 
     }
-
 
     ApplicationConfig applicationConfig;
 

@@ -7,18 +7,12 @@ import edu.java.bot.models.response.LinkResponse;
 import edu.java.bot.models.response.ListLinksResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.reactive.function.client.WebClientResponseException;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.util.retry.Retry;
-import java.rmi.ServerException;
-import java.time.Duration;
-import java.util.function.Predicate;
 
 @Slf4j
 public class ScrapperClient {
@@ -28,6 +22,8 @@ public class ScrapperClient {
     private final String headerTgChat = "Tg-Chat-Id";
 
     private final Retry retry;
+
+    private final String exceptionMessage = "Server error";
 
     public ScrapperClient(WebClient.Builder webClientBuilder, String baseUrl, Retry retry) {
         this.webClient = webClientBuilder.baseUrl(baseUrl).build();
@@ -47,7 +43,7 @@ public class ScrapperClient {
             .retrieve()
             .onStatus(
                 HttpStatusCode::is5xxServerError,
-                response -> Mono.error(new ServiceException("Server error", response.statusCode().value()))
+                response -> Mono.error(new ServiceException(exceptionMessage, response.statusCode().value()))
             )
             .toEntity(Void.class)
             .retryWhen(retry)
@@ -61,7 +57,7 @@ public class ScrapperClient {
             .retrieve()
             .onStatus(
                 HttpStatusCode::is5xxServerError,
-                response -> Mono.error(new ServiceException("Server error", response.statusCode().value()))
+                response -> Mono.error(new ServiceException(exceptionMessage, response.statusCode().value()))
             )
             .toEntity(Void.class)
             .retryWhen(retry)
@@ -74,10 +70,10 @@ public class ScrapperClient {
             .retrieve()
             .onStatus(
                 HttpStatusCode::is5xxServerError,
-                response -> Mono.error(new ServiceException("Server error", response.statusCode().value()))
+                response -> Mono.error(new ServiceException(exceptionMessage, response.statusCode().value()))
             )
-            .toEntity(ListLinksResponse.class).
-            retryWhen(retry).block();
+            .toEntity(ListLinksResponse.class)
+            .retryWhen(retry).block();
 
     }
 
@@ -89,7 +85,7 @@ public class ScrapperClient {
             .retrieve()
             .onStatus(
                 HttpStatusCode::is5xxServerError,
-                response -> Mono.error(new ServiceException("Server error", response.statusCode().value()))
+                response -> Mono.error(new ServiceException(exceptionMessage, response.statusCode().value()))
             )
             .toEntity(LinkResponse.class)
             .retryWhen(retry)
@@ -105,7 +101,7 @@ public class ScrapperClient {
             .retrieve()
             .onStatus(
                 HttpStatusCode::is5xxServerError,
-                response -> Mono.error(new ServiceException("Server error", response.statusCode().value()))
+                response -> Mono.error(new ServiceException(exceptionMessage, response.statusCode().value()))
             )
             .toEntity(LinkResponse.class)
             .retryWhen(retry)

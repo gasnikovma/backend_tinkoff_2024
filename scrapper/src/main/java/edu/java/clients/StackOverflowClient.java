@@ -13,14 +13,14 @@ public class StackOverflowClient {
 
     private final Retry retry;
 
-    public StackOverflowClient(WebClient.Builder webClientBuilder,Retry retry) {
+    public StackOverflowClient(WebClient.Builder webClientBuilder, Retry retry) {
         this.webClient = webClientBuilder.baseUrl(BASE_URL).build();
-        this.retry=retry;
+        this.retry = retry;
     }
 
-    public StackOverflowClient(WebClient.Builder webClientBuilder, String baseUrl,Retry retry) {
+    public StackOverflowClient(WebClient.Builder webClientBuilder, String baseUrl, Retry retry) {
         this.webClient = webClientBuilder.baseUrl(baseUrl).build();
-        this.retry=retry;
+        this.retry = retry;
     }
 
     public Mono<StackOverflowResponse> receiveRepo(Long ids) {
@@ -28,7 +28,8 @@ public class StackOverflowClient {
             .get()
             .uri("/2.3/questions/{ids}?order=desc&sort=activity&site=stackoverflow", ids)
             .retrieve()
-            .onStatus(HttpStatusCode::is5xxServerError,response->Mono.error(new ServiceException("Server exception",response.statusCode().value())))
+            .onStatus(HttpStatusCode::is5xxServerError,
+                response -> Mono.error(new ServiceException("Server exception", response.statusCode().value())))
             .bodyToMono(StackOverflowResponse.class)
             .retryWhen(retry);
 

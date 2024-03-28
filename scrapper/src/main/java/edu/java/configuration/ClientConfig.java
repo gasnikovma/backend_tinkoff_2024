@@ -12,18 +12,18 @@ import reactor.util.retry.Retry;
 public class ClientConfig {
 
     @Bean
-    public GithubClient githubClient(WebClient.Builder webClientBuilder,Retry retry) {
-        return new GithubClient(webClientBuilder,retry);
+    public GithubClient githubClient(WebClient.Builder webClientBuilder, Retry retry) {
+        return new GithubClient(webClientBuilder, retry);
     }
 
     @Bean
-    public StackOverflowClient stackOverflowClient(WebClient.Builder webClientBuilder,Retry retry) {
-        return new StackOverflowClient(webClientBuilder,retry);
+    public StackOverflowClient stackOverflowClient(WebClient.Builder webClientBuilder, Retry retry) {
+        return new StackOverflowClient(webClientBuilder, retry);
     }
 
     @Bean
     public BotClient botClient(WebClient.Builder webClientBuilder, Retry retry) {
-        return new BotClient(webClientBuilder,retry);
+        return new BotClient(webClientBuilder, retry);
     }
 
 }
