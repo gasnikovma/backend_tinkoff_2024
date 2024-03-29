@@ -2,7 +2,6 @@ package edu.java.filter;
 
 import io.github.bucket4j.Bandwidth;
 import io.github.bucket4j.Bucket;
-import io.github.bucket4j.Bucket4j;
 import io.github.bucket4j.ConsumptionProbe;
 import io.github.bucket4j.Refill;
 import jakarta.servlet.Filter;
@@ -14,17 +13,18 @@ import jakarta.servlet.ServletResponse;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.time.Duration;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import org.springframework.stereotype.Component;
 
 @Component
 @WebFilter("/*")
 public class RaceLimitFilter implements Filter {
 
     private final Map<String, Bucket> cache = new ConcurrentHashMap<>();
+    private final static int TOO_MANY_REQUESTS = 429;
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -40,27 +40,22 @@ public class RaceLimitFilter implements Filter {
         String ipAddress = request.getRemoteAddr();
         Bucket bucket = getBucket(ipAddress);
         ConsumptionProbe probe = bucket.tryConsumeAndReturnRemaining(1);
-        if(probe.isConsumed()){
-            filterChain.doFilter(servletRequest,servletResponse);
-        }
-        else{
-            int TOO_MANY_REQUESTS = 429;
+        if (probe.isConsumed()) {
+            filterChain.doFilter(servletRequest, servletResponse);
+        } else {
             response.setStatus(TOO_MANY_REQUESTS);
             response.getWriter().write("Too many requests");
         }
-
-
 
     }
 
     @SuppressWarnings("MagicNumber")
     private Bucket getBucket(String ipAddress) {
-        return cache.computeIfAbsent(ipAddress, key ->Bucket.builder()
+        return cache.computeIfAbsent(ipAddress, key -> Bucket.builder()
             .addLimit(Bandwidth.classic(10, Refill.intervally(10, Duration.ofMinutes(1))))
             .addLimit(Bandwidth.classic(5, Refill.intervally(5, Duration.ofSeconds(20))))
             .build());
     }
-
 
     @Override
     public void destroy() {
