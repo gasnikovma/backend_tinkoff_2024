@@ -5,14 +5,23 @@ app:
     force-check-delay: 10s
   database-access-type: jdbc
   retry:
-    type: LINEAR
+    type: CONSTANT
     statusCode: [500,501,502,503,504,505,506,507,508,509,510]
     delay: 5000
     attempts: 3
+  kafka:
+    bootstrap-servers: localhost:29092
+    topic: "newUpdate"
+  useQueue: true
 
 spring:
   application:
     name: scrapper
+  datasource:
+    url: jdbc:postgresql://localhost:5432/scrapper
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:

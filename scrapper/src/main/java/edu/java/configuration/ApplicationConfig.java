@@ -15,9 +15,15 @@ public record ApplicationConfig(
     @NotNull
     String databaseAccessType,
     @NotNull
-    Retry retry
+    Retry retry,
+    @NotNull
+    Kafka kafka,
+    boolean useQueue
 ) {
     public record Scheduler(boolean enable, @NotNull Duration interval, @NotNull Duration forceCheckDelay) {
+    }
+    public record Kafka(@NotNull String bootstrapServers, @NotNull String topic){
+
     }
 
     public record Retry(@NotNull

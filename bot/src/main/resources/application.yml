@@ -1,7 +1,7 @@
 app:
   telegram-token: ${APP_TELEGRAM_TOKEN}
   retry:
-    type: LINEAR
+    type: EXPONENTIAL
     statusCode: [ 500,501,502,503,504,505,506,507,508,509,510 ]
     delay: 5000
     attempts: 3

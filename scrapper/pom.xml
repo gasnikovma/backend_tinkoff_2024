@@ -153,6 +153,12 @@
             <artifactId>mysql-connector-java</artifactId>
             <version>5.1.6</version>
         </dependency>
+        <dependency>
+            <groupId>edu.java</groupId>
+            <artifactId>root</artifactId>
+            <version>0.1</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
     <build>

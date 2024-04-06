@@ -1,4 +1,4 @@
-package edu.java.exceptions;
+package edu.java.bot.exception;
 
 public class NoChatException extends RuntimeException {
     public NoChatException(String exMessage) {
