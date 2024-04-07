@@ -1,6 +1,7 @@
 package edu.java.configuration;
 
 import edu.java.models.dto.request.LinkUpdateRequest;
+import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +17,14 @@ import java.util.Map;
 
 @Configuration
 @EnableKafka
-public class KafkaConfig {
+public class KafkaProducerConfig {
+
+    private ApplicationConfig applicationConfig;
+
     @Autowired
-    ApplicationConfig applicationConfig;
+    public KafkaProducerConfig(ApplicationConfig applicationConfig){
+        this.applicationConfig=applicationConfig;
+    }
     @Bean
     public KafkaTemplate<String, LinkUpdateRequest> kafkaTemplate(ProducerFactory<String, LinkUpdateRequest> producerFactory) {
         return new KafkaTemplate<>(producerFactory);

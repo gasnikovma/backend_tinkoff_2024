@@ -10,7 +10,7 @@ app:
     delay: 5000
     attempts: 3
   kafka:
-    bootstrap-servers: localhost:29092
+    bootstrap-servers: localhost:9092
     topic: "newUpdate"
   useQueue: true
 
