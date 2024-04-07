@@ -26,7 +26,7 @@ public class LinkUpdateListener {
             service.handleUpdates(linkUpdateRequest);
 
         } catch (Exception e) {
-            kafkaTemplate.send("newUpdate_dlq",linkUpdateRequest);
+            kafkaTemplate.send("newUpdate_dlq", linkUpdateRequest);
             log.error("exception");
         }
 

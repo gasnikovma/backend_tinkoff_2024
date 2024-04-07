@@ -24,6 +24,7 @@ import org.springframework.kafka.support.serializer.JsonSerializer;
 @Configuration
 @EnableKafka
 @RequiredArgsConstructor
+@SuppressWarnings("LineLength")
 public class KafkaConsumerConfig {
     ApplicationConfig applicationConfig;
 
