@@ -13,12 +13,15 @@ public class LinkUpdateService {
     private final BotClient botClient;
     private final ScrapperQueueProducer scrapperQueueProducer;
     private final ApplicationConfig applicationConfig;
-    public void update(LinkUpdateRequest linkUpdateRequest){
-        if(applicationConfig.useQueue()){
+
+    public void update(LinkUpdateRequest linkUpdateRequest) {
+        if (applicationConfig.useQueue()) {
             scrapperQueueProducer.sendMessage(linkUpdateRequest);
-        }
-        else {
-            botClient.update(linkUpdateRequest.id(),linkUpdateRequest.uri(),linkUpdateRequest.description(),linkUpdateRequest.tgChatIds()).getBody();
+        } else {
+            botClient.update(linkUpdateRequest.id(),
+                linkUpdateRequest.uri(),
+                linkUpdateRequest.description(),
+                linkUpdateRequest.tgChatIds()).getBody();
         }
     }
 

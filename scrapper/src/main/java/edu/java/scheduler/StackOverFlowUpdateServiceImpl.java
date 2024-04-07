@@ -1,16 +1,14 @@
 package edu.java.scheduler;
 
-import edu.java.clients.BotClient;
 import edu.java.clients.StackOverflowClient;
 import edu.java.models.StackOverflowResponse;
 import edu.java.models.dto.Link;
 import edu.java.models.dto.request.LinkUpdateRequest;
 import edu.java.repository.LinkRepository;
+import edu.java.service.LinkUpdateService;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-import edu.java.service.LinkUpdateService;
-import edu.java.service.kafka.ScrapperQueueProducer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -44,7 +42,12 @@ public class StackOverFlowUpdateServiceImpl implements UpdateService {
                     stackOverflowResponse.itemsResponses().get(0).lastActivityDate(),
                     link.getUri()
                 );
-                linkUpdateService.update(new LinkUpdateRequest(link.getId(),link.getUri(),"New update from website:", linkRepository.findChatsByLink(link.getUri())));
+                linkUpdateService.update(new LinkUpdateRequest(
+                    link.getId(),
+                    link.getUri(),
+                    "New update from website:",
+                    linkRepository.findChatsByLink(link.getUri())
+                ));
                 /*botClient.update(
                     link.getId(),
                     link.getUri(),

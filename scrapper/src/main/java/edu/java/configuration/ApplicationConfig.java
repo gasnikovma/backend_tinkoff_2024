@@ -22,7 +22,8 @@ public record ApplicationConfig(
 ) {
     public record Scheduler(boolean enable, @NotNull Duration interval, @NotNull Duration forceCheckDelay) {
     }
-    public record Kafka(@NotNull String bootstrapServers, @NotNull String topic){
+
+    public record Kafka(@NotNull String bootstrapServers, @NotNull String topic) {
 
     }
 

@@ -2,7 +2,6 @@ package edu.java.configuration;
 
 import edu.java.exceptions.ServiceException;
 import java.time.Duration;
-import lombok.extern.log4j.Log4j;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

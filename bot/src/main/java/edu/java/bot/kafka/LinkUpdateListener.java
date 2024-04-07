@@ -1,13 +1,9 @@
 package edu.java.bot.kafka;
 
-import com.pengrad.telegrambot.TelegramBot;
-import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.UpdatesHandlerService;
 import edu.java.bot.models.request.LinkUpdateRequest;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.glassfish.jersey.server.ContainerFactory;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
