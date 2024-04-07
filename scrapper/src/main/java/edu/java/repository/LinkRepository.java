@@ -22,9 +22,9 @@ public interface LinkRepository {
 
     Optional<Link> findById(long linkId);
 
-    void updateLastCheck(OffsetDateTime check, String name);
+    void updateLastCheck(OffsetDateTime check, String uri);
 
-    void updateLastUpdate(OffsetDateTime check, String name);
+    void updateLastUpdate(OffsetDateTime check, String uri);
 
     List<Link> getOldestLinks(int limit);
 

@@ -1,9 +1,9 @@
 package edu.java.scrapper;
 
-import edu.java.jdbc.JdbcChatRepository;
-import edu.java.jdbc.JdbcLinkRepository;
 import edu.java.models.dto.Chat;
 import edu.java.models.dto.Link;
+import edu.java.repository.jdbc.JdbcChatRepository;
+import edu.java.repository.jdbc.JdbcLinkRepository;
 import edu.java.repository.ChatRepository;
 import edu.java.repository.LinkRepository;
 import edu.java.service.LinkService;
@@ -28,7 +28,7 @@ public class LinkServiceTest {
     URI uri,uri_1,uri_2;
     Link link,link_1,link_2;
 
-    @BeforeEach
+     @BeforeEach
     public void init() {
         uri = URI.create("https://github.com/gasnikovma");
         uri_1=URI.create("https://github.com/iceberg");

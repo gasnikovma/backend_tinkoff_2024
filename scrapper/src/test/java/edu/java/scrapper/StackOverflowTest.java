@@ -11,13 +11,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.client.WebClient;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.options;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-
-@SpringBootTest
 public class StackOverflowTest {
     private WireMockServer wireMockServer;
     private StackOverflowClient stackOverflowClient;
@@ -51,12 +52,15 @@ public class StackOverflowTest {
                     }
                 ]
             }""";
-            wireMockServer.stubFor(get(urlEqualTo("/2.3/questions/15794821?order=desc&sort=activity&site=stackoverflow")).willReturn(
-                aResponse().withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                    .withBody(wireMockResponse)));
+        wireMockServer.stubFor(get(urlEqualTo("/2.3/questions/15794821?order=desc&sort=activity&site=stackoverflow")).willReturn(
+            aResponse().withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .withBody(wireMockResponse)));
         StackOverflowResponse githubResponse = stackOverflowClient.receiveRepo(15794821L).block();
         assertEquals(githubResponse.itemsResponses().get(0).questionId(), 15794821L);
-        assertEquals(githubResponse.itemsResponses().get(0).creationDate(), 1365012645L);
+        assertEquals(githubResponse.itemsResponses().get(0).creationDate(), OffsetDateTime.of(
+            LocalDateTime.of(2013, 4, 3, 18, 10,45),
+            ZoneOffset.UTC
+        ));
     }
 
 }

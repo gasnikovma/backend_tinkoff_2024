@@ -18,7 +18,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.options;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@SpringBootTest
+
 public class GithubClientTest {
     private WireMockServer wireMockServer;
     private GithubClient githubClient;

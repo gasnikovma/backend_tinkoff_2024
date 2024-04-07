@@ -3,13 +3,22 @@ app:
     enable: true
     interval: 20s
     force-check-delay: 10s
+  database-access-type: jpa
 
 spring:
   application:
     name: scrapper
-
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
   autoconfigure:
-    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration, org.springframework.boot.autoconfigure.liquibase.LiquibaseAutoConfiguration
 
 server:
   port: 8080

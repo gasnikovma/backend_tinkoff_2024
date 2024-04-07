@@ -1,4 +1,4 @@
-package edu.java.jdbc;
+package edu.java.repository.jdbc;
 
 import edu.java.models.dto.Link;
 import edu.java.repository.LinkRepository;
@@ -7,10 +7,8 @@ import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-@Repository
 @SuppressWarnings("MultipleStringLiterals")
 @RequiredArgsConstructor
 public class JdbcLinkRepository implements LinkRepository {

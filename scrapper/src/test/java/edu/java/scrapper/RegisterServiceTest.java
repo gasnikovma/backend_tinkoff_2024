@@ -1,7 +1,7 @@
 package edu.java.scrapper;
 
 import edu.java.exceptions.ChatAlreadyExistsException;
-import edu.java.jdbc.JdbcChatRepository;
+import edu.java.repository.jdbc.JdbcChatRepository;
 import edu.java.repository.ChatRepository;
 import edu.java.service.RegisterService;
 import edu.java.service.RegisterServiceImpl;
