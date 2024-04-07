@@ -9,6 +9,7 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 @Configuration
 @SuppressWarnings("MultipleStringLiterals")
 public class DatabaseConfig {
+
     @Value("${spring.datasource.url}")
     private String url;
     @Value("${spring.datasource.username}")

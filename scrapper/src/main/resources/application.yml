@@ -3,7 +3,12 @@ app:
     enable: true
     interval: 20s
     force-check-delay: 10s
-  database-access-type: jpa
+  database-access-type: jdbc
+  retry:
+    type: LINEAR
+    statusCode: [500,501,502,503,504,505,506,507,508,509,510]
+    delay: 5000
+    attempts: 3
 
 spring:
   application:
@@ -16,7 +21,7 @@ spring:
       hibernate:
         show_sql: true
         format_sql: true
-        dialect: org.hibernate.dialect.PostgreSQLDialect
+
   autoconfigure:
     exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration, org.springframework.boot.autoconfigure.liquibase.LiquibaseAutoConfiguration
 
