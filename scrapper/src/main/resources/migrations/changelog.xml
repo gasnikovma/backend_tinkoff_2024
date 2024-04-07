@@ -13,4 +13,5 @@
         <sqlFile path="create-chat-link-table.sql" relativeToChangelogFile="true"/>
     </changeSet>
 
+
 </databaseChangeLog>

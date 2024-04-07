@@ -4,11 +4,13 @@ import edu.java.bot.models.request.AddLinkRequest;
 import edu.java.bot.models.request.RemoveLinkRequest;
 import edu.java.bot.models.response.LinkResponse;
 import edu.java.bot.models.response.ListLinksResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
+@Slf4j
 public class ScrapperClient {
     private final WebClient webClient;
     private final String urlTgChat = "/scrapper/tg-chat/{id}";
@@ -24,6 +26,7 @@ public class ScrapperClient {
     }
 
     public ResponseEntity<Void> registerChat(long id) {
+
         return this.webClient.post()
             .uri(urlTgChat, id)
             .retrieve()
@@ -40,14 +43,15 @@ public class ScrapperClient {
     }
 
     public ResponseEntity<ListLinksResponse> getLinks(long chatId) {
-        return this.webClient.get()
+       return this.webClient.get()
             .uri(urlLinks).header(headerTgChat, String.valueOf(chatId))
             .retrieve()
             .toEntity(ListLinksResponse.class).block();
 
+
     }
 
-    public ResponseEntity<LinkResponse> addLink(long chatId, String uri) {
+   public ResponseEntity<LinkResponse> addLink(long chatId, String uri) {
         return this.webClient.post()
             .uri(urlLinks)
             .header(headerTgChat, String.valueOf(chatId))
@@ -55,9 +59,12 @@ public class ScrapperClient {
             .retrieve()
             .toEntity(LinkResponse.class)
             .block();
+
     }
 
-    public ResponseEntity<LinkResponse> removeLink(long chatId, String uri) {
+
+
+       public ResponseEntity<LinkResponse> removeLink(long chatId, String uri) {
         return this.webClient.method(HttpMethod.DELETE)
             .uri(urlLinks)
             .header(headerTgChat, String.valueOf(chatId))

@@ -2,8 +2,12 @@ package edu.java.bot.command;
 
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor
 public class StartCommandHandler implements Command {
+
+    private CommandUtils commandUtils;
 
     @Override
     public String name() {
@@ -17,6 +21,6 @@ public class StartCommandHandler implements Command {
 
     @Override
     public SendMessage handle(Update update) {
-        return new SendMessage(update.message().chat().id(), "User has been successfully registered");
+        return commandUtils.registerChat(update);
     }
 }
