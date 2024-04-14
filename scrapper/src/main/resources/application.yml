@@ -46,6 +46,14 @@ management:
   metrics:
     tags:
       application: ${spring.application.name}
+  endpoint:
+    info:
+      enabled: true
+    health:
+      enabled: true
+    prometheus:
+      enabled: true
+
 server:
   port: 8080
 springdoc.swagger-ui.path: /swagger-ui

@@ -8,6 +8,7 @@ import edu.java.models.dto.response.LinkResponse;
 import edu.java.models.dto.response.ListLinksResponse;
 import edu.java.service.LinkService;
 import edu.java.service.RegisterService;
+import io.micrometer.core.instrument.Counter;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -27,73 +28,63 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
-@RequestMapping("scrapper")
-@RequiredArgsConstructor
-@Slf4j
-public class ScrapperController {
+@RestController @RequestMapping("scrapper") @RequiredArgsConstructor @Slf4j public class ScrapperController {
 
     private final LinkService linkService;
+
+    private final Counter counter;
     private final RegisterService registerService;
 
     @Operation(summary = "Зарегистровать чат")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Чат зарегистрирован"),
-        @ApiResponse(responseCode = "400",
-                     description = "Некорректные параметры запроса",
-                     content = @Content(mediaType = "application/json",
-                                        schema = @Schema(implementation = ApiErrorResponse.class))),
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Чат зарегистрирован"), @ApiResponse(
+        responseCode = "400",
+        description = "Некорректные параметры запроса",
+        content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiErrorResponse.class))),
         @ApiResponse(responseCode = "406",
                      description = "Чат с заданным id уже существует",
                      content = @Content(mediaType = "application/json",
                                         schema = @Schema(implementation = ApiErrorResponse.class)))
 
-    })
-    @PostMapping("/tg-chat/{id}")
-    public String  registerChat(@PathVariable long id) {
-
+    }) @PostMapping("/tg-chat/{id}") public String registerChat(@PathVariable long id) {
+        counter.increment();
         registerService.reigster(id);
         return "Chat is registered!";
     }
 
     @Operation(summary = "Удалить чат")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Чат успешно удален"),
-        @ApiResponse(responseCode = "400",
-                     description = "Некорректные параметры запроса",
-                     content = @Content(mediaType = "application/json",
-                                        schema = @Schema(implementation = ApiErrorResponse.class))),
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Чат успешно удален"), @ApiResponse(
+        responseCode = "400",
+        description = "Некорректные параметры запроса",
+        content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiErrorResponse.class))),
         @ApiResponse(responseCode = "404",
                      description = "Чат с заданным id не существует",
                      content = @Content(mediaType = "application/json",
                                         schema = @Schema(implementation = ApiErrorResponse.class)))
 
-    })
-    @DeleteMapping("/tg-chat/{id}")
-    public String deleteChat(@PathVariable long id) {
+    }) @DeleteMapping("/tg-chat/{id}") public String deleteChat(@PathVariable long id) {
+        counter.increment();
         registerService.unregister(id);
         return "Chat is successfully deleted";
     }
 
-    @Operation(summary = "Получить все отслеживаемые ссылки")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200",
-                     description = "Ссылки успешно получены",
-                     content = @Content(mediaType = "application/json",
-                                        schema = @Schema(implementation = ListLinksResponse.class))),
+    @Operation(summary = "Получить все отслеживаемые ссылки") @ApiResponses(value = {@ApiResponse(responseCode = "200",
+                                                                                                  description = "Ссылки успешно получены",
+                                                                                                  content = @Content(
+                                                                                                      mediaType = "application/json",
+                                                                                                      schema = @Schema(
+                                                                                                          implementation = ListLinksResponse.class))),
         @ApiResponse(responseCode = "400",
                      description = "Некорректные параметры запроса",
                      content = @Content(mediaType = "application/json",
-                                        schema = @Schema(implementation = ApiErrorResponse.class))),
-        @ApiResponse(responseCode = "406",
-                     description = "Чат с заданным id уже существует",
-                     content = @Content(mediaType = "application/json",
-                                        schema = @Schema(implementation = ApiErrorResponse.class)))
+                                        schema = @Schema(implementation = ApiErrorResponse.class))), @ApiResponse(
+        responseCode = "406",
+        description = "Чат с заданным id уже существует",
+        content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiErrorResponse.class)))
 
     })
 
-    @GetMapping("/links")
-    ListLinksResponse getLinks(@RequestHeader("Tg-Chat-Id") long chatId) {
+    @GetMapping("/links") ListLinksResponse getLinks(@RequestHeader("Tg-Chat-Id") long chatId) {
+        counter.increment();
         List<Link> links = linkService.allLinks(chatId);
         List<LinkResponse> linkResponses = new ArrayList<>();
         for (int i = 0; i < links.size(); i++) {
@@ -103,56 +94,47 @@ public class ScrapperController {
 
     }
 
-    @Operation(summary = "Добавить отслеживание ссылки")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200",
-                     description = "Ссылка успешно добавлена",
-                     content = @Content(mediaType = "application/json",
-                                        schema = @Schema(implementation = LinkResponse.class))),
+    @Operation(summary = "Добавить отслеживание ссылки") @ApiResponses(value = {@ApiResponse(responseCode = "200",
+                                                                                             description = "Ссылка успешно добавлена",
+                                                                                             content = @Content(
+                                                                                                 mediaType = "application/json",
+                                                                                                 schema = @Schema(
+                                                                                                     implementation = LinkResponse.class))),
         @ApiResponse(responseCode = "400",
                      description = "Некорректные параметры запроса",
                      content = @Content(mediaType = "application/json",
-                                        schema = @Schema(implementation = ApiErrorResponse.class))),
-        @ApiResponse(responseCode = "404",
-                     description = "Чат с заданным id не существует",
-                     content = @Content(mediaType = "application/json",
-                                        schema = @Schema(implementation = ApiErrorResponse.class)))
+                                        schema = @Schema(implementation = ApiErrorResponse.class))), @ApiResponse(
+        responseCode = "404",
+        description = "Чат с заданным id не существует",
+        content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiErrorResponse.class)))
 
-    })
-    @PostMapping("/links")
-    public LinkResponse addLink(
-        @RequestHeader("Tg-Chat-Id")
-        long chatId, @RequestBody
-    AddLinkRequest addLinkRequest
+    }) @PostMapping("/links") public LinkResponse addLink(
+        @RequestHeader("Tg-Chat-Id") long chatId, @RequestBody AddLinkRequest addLinkRequest
     ) {
-
-
+        counter.increment();
         Link link = linkService.add(chatId, URI.create(addLinkRequest.uri()));
         return new LinkResponse(link.getId(), link.getUri());
     }
 
-    @Operation(summary = "Убрать отслеживание ссылки")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200",
-                     description = "Ссылка успешно убрана",
-                     content = @Content(mediaType = "application/json",
-                                        schema = @Schema(implementation = LinkResponse.class))),
+    @Operation(summary = "Убрать отслеживание ссылки") @ApiResponses(value = {@ApiResponse(responseCode = "200",
+                                                                                           description = "Ссылка успешно убрана",
+                                                                                           content = @Content(mediaType = "application/json",
+                                                                                                              schema = @Schema(
+                                                                                                                  implementation = LinkResponse.class))),
         @ApiResponse(responseCode = "400",
                      description = "Некорректные параметры запроса",
                      content = @Content(mediaType = "application/json",
-                                        schema = @Schema(implementation = ApiErrorResponse.class))),
-        @ApiResponse(responseCode = "404",
-                     description = "Ссылка не найдена",
-                     content = @Content(mediaType = "application/json",
-                                        schema = @Schema(implementation = ApiErrorResponse.class)))
+                                        schema = @Schema(implementation = ApiErrorResponse.class))), @ApiResponse(
+        responseCode = "404",
+        description = "Ссылка не найдена",
+        content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiErrorResponse.class)))
 
     })
 
-    @DeleteMapping("/links")
-    public LinkResponse removeLink(
-        @RequestHeader(name = "Tg-Chat-Id") long chatId, @RequestBody
-    RemoveLinkRequest removeLinkRequest
+    @DeleteMapping("/links") public LinkResponse removeLink(
+        @RequestHeader(name = "Tg-Chat-Id") long chatId, @RequestBody RemoveLinkRequest removeLinkRequest
     ) {
+        counter.increment();
         Link link = linkService.remove(chatId, URI.create(removeLinkRequest.uri()));
         return new LinkResponse(link.getId(), link.getUri());
     }

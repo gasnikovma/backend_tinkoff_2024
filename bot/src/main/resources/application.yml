@@ -31,6 +31,15 @@ management:
   metrics:
     tags:
       application: ${spring.application.name}
+  endpoint:
+    info:
+      enabled: true
+    health:
+      enabled: true
+    prometheus:
+      enabled: true
+
+
 
 logging:
   config: classpath:log4j2-plain.xml
