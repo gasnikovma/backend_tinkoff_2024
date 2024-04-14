@@ -67,12 +67,10 @@ import org.springframework.web.bind.annotation.RestController;
         return "Chat is successfully deleted";
     }
 
-    @Operation(summary = "Получить все отслеживаемые ссылки") @ApiResponses(value = {@ApiResponse(responseCode = "200",
-                                                                                                  description = "Ссылки успешно получены",
-                                                                                                  content = @Content(
-                                                                                                      mediaType = "application/json",
-                                                                                                      schema = @Schema(
-                                                                                                          implementation = ListLinksResponse.class))),
+    @Operation(summary = "Получить все отслеживаемые ссылки")
+    @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Ссылки успешно получены",
+                                         content = @Content(mediaType = "application/json", schema = @Schema(
+                                             implementation = ListLinksResponse.class))),
         @ApiResponse(responseCode = "400",
                      description = "Некорректные параметры запроса",
                      content = @Content(mediaType = "application/json",
@@ -94,12 +92,10 @@ import org.springframework.web.bind.annotation.RestController;
 
     }
 
-    @Operation(summary = "Добавить отслеживание ссылки") @ApiResponses(value = {@ApiResponse(responseCode = "200",
-                                                                                             description = "Ссылка успешно добавлена",
-                                                                                             content = @Content(
-                                                                                                 mediaType = "application/json",
-                                                                                                 schema = @Schema(
-                                                                                                     implementation = LinkResponse.class))),
+    @Operation(summary = "Добавить отслеживание ссылки") @ApiResponses(value = {
+        @ApiResponse(responseCode = "200",
+                     description = "Ссылка успешно добавлена", content =
+                     @Content(mediaType = "application/json", schema = @Schema(implementation = LinkResponse.class))),
         @ApiResponse(responseCode = "400",
                      description = "Некорректные параметры запроса",
                      content = @Content(mediaType = "application/json",
@@ -116,11 +112,11 @@ import org.springframework.web.bind.annotation.RestController;
         return new LinkResponse(link.getId(), link.getUri());
     }
 
-    @Operation(summary = "Убрать отслеживание ссылки") @ApiResponses(value = {@ApiResponse(responseCode = "200",
-                                                                                           description = "Ссылка успешно убрана",
-                                                                                           content = @Content(mediaType = "application/json",
-                                                                                                              schema = @Schema(
-                                                                                                                  implementation = LinkResponse.class))),
+    @Operation(summary = "Убрать отслеживание ссылки") @ApiResponses(value = {
+        @ApiResponse(responseCode = "200",
+                     description = "Ссылка успешно убрана", content =
+                     @Content(mediaType = "application/json",
+                              schema = @Schema(implementation = LinkResponse.class))),
         @ApiResponse(responseCode = "400",
                      description = "Некорректные параметры запроса",
                      content = @Content(mediaType = "application/json",
