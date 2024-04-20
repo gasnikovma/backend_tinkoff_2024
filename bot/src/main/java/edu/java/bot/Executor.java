@@ -7,20 +7,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 @org.springframework.stereotype.Controller
 public class Executor {
 
-    private final Service telegraBotService;
+    private final Service telegramBotService;
     private final TelegramBot bot;
 
     @Autowired
     public Executor(Service service, TelegramBot bot) {
-        this.telegraBotService = service;
+        this.telegramBotService = service;
         this.bot = bot;
         this.run();
     }
 
     public void run() {
-        telegraBotService.setMyCommands();
+        telegramBotService.setMyCommands();
         bot.setUpdatesListener(list -> {
-            list.forEach(telegraBotService::handleUpdates);
+            list.forEach(telegramBotService::handleUpdates);
 
             return UpdatesListener.CONFIRMED_UPDATES_ALL;
 
