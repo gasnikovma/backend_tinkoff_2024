@@ -2,6 +2,7 @@ package edu.java.configuration;
 
 import edu.java.exceptions.ServiceException;
 import java.time.Duration;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,6 +12,7 @@ import reactor.util.retry.Retry;
 
 @Configuration
 @SuppressWarnings("InnerTypeLast")
+@Slf4j
 public class RetryConfig {
 
     public static class RetryIteration {

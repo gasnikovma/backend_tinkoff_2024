@@ -1,10 +1,11 @@
 package edu.java.scheduler;
 
-import edu.java.clients.BotClient;
 import edu.java.clients.StackOverflowClient;
 import edu.java.models.StackOverflowResponse;
 import edu.java.models.dto.Link;
+import edu.java.models.dto.request.LinkUpdateRequest;
 import edu.java.repository.LinkRepository;
+import edu.java.service.LinkUpdateService;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
@@ -16,7 +17,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Slf4j
 public class StackOverFlowUpdateServiceImpl implements UpdateService {
-    private final BotClient botClient;
+    private final LinkUpdateService linkUpdateService;
     private final LinkRepository linkRepository;
     private final StackOverflowClient stackOverflowClient;
 
@@ -41,12 +42,18 @@ public class StackOverFlowUpdateServiceImpl implements UpdateService {
                     stackOverflowResponse.itemsResponses().get(0).lastActivityDate(),
                     link.getUri()
                 );
-                botClient.update(
+                linkUpdateService.update(new LinkUpdateRequest(
                     link.getId(),
                     link.getUri(),
                     "New update from website:",
                     linkRepository.findChatsByLink(link.getUri())
-                );
+                ));
+                /*botClient.update(
+                    link.getId(),
+                    link.getUri(),
+                    "New update from website:",
+                    linkRepository.findChatsByLink(link.getUri())
+                );*/
 
             }
 

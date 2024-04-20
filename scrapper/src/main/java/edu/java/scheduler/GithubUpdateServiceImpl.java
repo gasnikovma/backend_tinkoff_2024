@@ -1,10 +1,11 @@
 package edu.java.scheduler;
 
-import edu.java.clients.BotClient;
 import edu.java.clients.GithubClient;
 import edu.java.models.GithubResponse;
 import edu.java.models.dto.Link;
+import edu.java.models.dto.request.LinkUpdateRequest;
 import edu.java.repository.LinkRepository;
+import edu.java.service.LinkUpdateService;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
@@ -16,7 +17,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Slf4j
 public class GithubUpdateServiceImpl implements UpdateService {
-    private final BotClient botClient;
+    private final LinkUpdateService linkUpdateService;
     private final LinkRepository linkRepository;
     private final GithubClient githubClient;
 
@@ -34,12 +35,18 @@ public class GithubUpdateServiceImpl implements UpdateService {
                 linkRepository.updateLastUpdate(githubResponse.pushed(), link.getUri());
             } else if (githubResponse.pushed().isAfter(link.getLastUpdate())) {
                 linkRepository.updateLastUpdate(githubResponse.pushed(), link.getUri());
-                botClient.update(
+                linkUpdateService.update(new LinkUpdateRequest(
                     link.getId(),
                     link.getUri(),
                     "New update from website:",
                     linkRepository.findChatsByLink(link.getUri())
-                );
+                ));
+                /*botClient.update(
+                    link.getId(),
+                    link.getUri(),
+                    "New update from website:",
+                    linkRepository.findChatsByLink(link.getUri())
+                );*/
 
             }
 

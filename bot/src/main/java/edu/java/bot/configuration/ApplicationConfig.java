@@ -11,7 +11,12 @@ import org.springframework.validation.annotation.Validated;
 public record ApplicationConfig(
     @NotEmpty
     String telegramToken,
-    Retry retry
+
+    @NotNull
+    Retry retry,
+    @NotNull
+    Kafka kafka
+
 ) {
     public record Retry(
         @NotNull
@@ -23,6 +28,11 @@ public record ApplicationConfig(
         @NotNull
         int attempts
 
-    ){}
+    ) {
+    }
+
+    public record Kafka(
+        @NotNull String bootstrapServers, @NotNull String topic, @NotNull String groupId) {
+    }
 
 }

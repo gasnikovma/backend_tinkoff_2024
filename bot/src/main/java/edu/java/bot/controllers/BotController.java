@@ -1,7 +1,6 @@
 package edu.java.bot.controllers;
 
-import com.pengrad.telegrambot.TelegramBot;
-import com.pengrad.telegrambot.request.SendMessage;
+import edu.java.bot.UpdatesHandlerService;
 import edu.java.bot.models.request.LinkUpdateRequest;
 import edu.java.bot.models.response.ApiErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -10,7 +9,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 @AllArgsConstructor
 public class BotController {
 
-    private final TelegramBot bot;
+    private final UpdatesHandlerService service;
 
     @Operation(summary = "Отправить обновление")
     @ApiResponses(value = {
@@ -38,11 +36,7 @@ public class BotController {
 
     @PostMapping(path = "/updates")
     public ResponseEntity<Void> update(@RequestBody @Valid LinkUpdateRequest linkUpdateRequest) {
-        List<Long> chats = linkUpdateRequest.tgChatIds();
-        log.info(chats.toString());
-        for (Long chatId : chats) {
-            bot.execute(new SendMessage(chatId, linkUpdateRequest.description() + linkUpdateRequest.uri()));
-        }
+        service.handleUpdates(linkUpdateRequest);
         return ResponseEntity.ok().build();
     }
 
